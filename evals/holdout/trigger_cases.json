@@ -10,14 +10,41 @@
     "summarize"
   ],
   "should_trigger": [
-    "Build a reusable skill from this long internal process note, and make sure it has references, scripts, and a trigger description.",
-    "Take this existing skill draft, tighten the trigger boundary, add near-neighbor evals, and package it for distribution."
+    {
+      "text": "Build a reusable skill from this long internal process note, and make sure it has references, scripts, and a trigger description.",
+      "family": "complex_multi_asset"
+    },
+    {
+      "text": "Take this existing skill draft, tighten the trigger boundary, add near-neighbor evals, and package it for distribution.",
+      "family": "iterate_existing_skill"
+    },
+    {
+      "text": "Turn this recurring onboarding process into a reusable skill library entry with validation notes.",
+      "family": "workflow_to_skill"
+    }
   ],
   "should_not_trigger": [
-    "I pasted a long process description below, but I only want a summary, not a reusable skill."
+    {
+      "text": "I pasted a long process description below, but I only want a summary, not a reusable skill.",
+      "family": "summary_only"
+    },
+    {
+      "text": "Explain this release checklist in simpler language; do not package it.",
+      "family": "explain_only"
+    }
   ],
   "near_neighbor": [
-    "Help me shape an idea before we decide whether to build a skill.",
-    "Create an outline for a possible future skill, but do not build the skill yet."
+    {
+      "text": "Help me shape an idea before we decide whether to build a skill.",
+      "family": "future_outline_vs_build"
+    },
+    {
+      "text": "Create an outline for a possible future skill, but do not build the skill yet.",
+      "family": "future_outline_vs_build"
+    },
+    {
+      "text": "Turn this into a document package for the wiki, not an agent skill.",
+      "family": "document_export_vs_agent_skill"
+    }
   ]
 }

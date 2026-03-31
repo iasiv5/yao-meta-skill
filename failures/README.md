@@ -14,3 +14,5 @@ Current case library:
 - `explain-not-package`
 - `document-export-vs-agent-skill`
 - `future-outline-vs-build`
+
+Each family now includes a `cases.json` file so the anti-pattern can run in automated regression instead of living only as prose.

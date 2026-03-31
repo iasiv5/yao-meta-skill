@@ -42,6 +42,7 @@ def main() -> None:
 
     suites = {}
     aggregate = {"false_positives": 0, "false_negatives": 0, "precision": [], "recall": []}
+    family_summary: dict[str, dict] = {}
     for name in ("train", "dev", "holdout"):
         report = run_case(script, description, baseline, root / name / "trigger_cases.json")
         suites[name] = report
@@ -51,6 +52,18 @@ def main() -> None:
             aggregate["precision"].append(report["precision"])
         if report["recall"] is not None:
             aggregate["recall"].append(report["recall"])
+        for family, stats in report.get("family_stats", {}).items():
+            slot = family_summary.setdefault(
+                family,
+                {"total": 0, "passed": 0, "false_positives": 0, "false_negatives": 0},
+            )
+            slot["total"] += stats["total"]
+            slot["passed"] += stats["passed"]
+            slot["false_positives"] += stats["false_positives"]
+            slot["false_negatives"] += stats["false_negatives"]
+
+    for family, stats in family_summary.items():
+        stats["pass_rate"] = round(stats["passed"] / stats["total"], 3) if stats["total"] else None
 
     summary = {
         "suite_count": len(suites),
@@ -59,7 +72,7 @@ def main() -> None:
         "average_precision": round(sum(aggregate["precision"]) / len(aggregate["precision"]), 3) if aggregate["precision"] else None,
         "average_recall": round(sum(aggregate["recall"]) / len(aggregate["recall"]), 3) if aggregate["recall"] else None,
     }
-    output = {"summary": summary, "suites": suites}
+    output = {"summary": summary, "family_summary": family_summary, "suites": suites}
     print(json.dumps(output, ensure_ascii=False, indent=2))
     if summary["false_positives"] > 0 or summary["false_negatives"] > 0:
         raise SystemExit(2)

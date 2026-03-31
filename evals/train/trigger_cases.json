@@ -10,26 +10,97 @@
     "summarize"
   ],
   "should_trigger": [
-    "Create a skill from this repeated workflow.",
-    "Improve this skill description and add evals.",
-    "Turn this runbook into a reusable agent skill.",
-    "Package this skill for team reuse.",
-    "Refactor this prompt into a proper skill package.",
-    "Create a meta-skill for packaging internal workflows."
+    {
+      "text": "Create a skill from this repeated workflow.",
+      "family": "workflow_to_skill"
+    },
+    {
+      "text": "Turn this runbook into a reusable agent skill.",
+      "family": "workflow_to_skill"
+    },
+    {
+      "text": "Convert this process note into a reusable skill package for the team.",
+      "family": "workflow_to_skill"
+    },
+    {
+      "text": "Improve this skill description and add evals.",
+      "family": "iterate_existing_skill"
+    },
+    {
+      "text": "Refactor this prompt into a proper skill package.",
+      "family": "iterate_existing_skill"
+    },
+    {
+      "text": "Package this skill for team reuse.",
+      "family": "package_for_team"
+    },
+    {
+      "text": "Create a meta-skill for packaging internal workflows.",
+      "family": "meta_skill_creation"
+    },
+    {
+      "text": "Standardize this recurring workflow as a shareable skill package with references.",
+      "family": "package_for_team"
+    }
   ],
   "should_not_trigger": [
-    "Explain what a workflow is.",
-    "Write a product headline for this landing page.",
-    "Summarize this random note.",
-    "Just explain what a skill is.",
-    "Draft a blog title for this article.",
-    "Translate this README into Japanese."
+    {
+      "text": "Explain what a workflow is.",
+      "family": "explain_only"
+    },
+    {
+      "text": "Just explain what a skill is.",
+      "family": "explain_only"
+    },
+    {
+      "text": "Summarize this random note.",
+      "family": "summary_only"
+    },
+    {
+      "text": "Translate this README into Japanese.",
+      "family": "translate_only"
+    },
+    {
+      "text": "Write a product headline for this landing page.",
+      "family": "document_only"
+    },
+    {
+      "text": "Draft a blog title for this article.",
+      "family": "document_only"
+    },
+    {
+      "text": "Rewrite this paragraph more clearly, but do not package anything.",
+      "family": "document_only"
+    },
+    {
+      "text": "Explain the difference between a runbook and a workflow.",
+      "family": "explain_only"
+    }
   ],
   "near_neighbor": [
-    "Create a one-off prompt for this task.",
-    "Help me brainstorm process ideas without building a skill.",
-    "Improve this README but do not turn it into a skill.",
-    "Make a checklist for this task, but not a reusable skill.",
-    "Write a custom answer for this request without creating a skill package."
+    {
+      "text": "Create a one-off prompt for this task.",
+      "family": "one_off_vs_reusable"
+    },
+    {
+      "text": "Write a custom answer for this request without creating a skill package.",
+      "family": "one_off_vs_reusable"
+    },
+    {
+      "text": "Help me brainstorm process ideas without building a skill.",
+      "family": "brainstorm_vs_build"
+    },
+    {
+      "text": "Improve this README but do not turn it into a skill.",
+      "family": "document_export_vs_agent_skill"
+    },
+    {
+      "text": "Make a checklist for this task, but not a reusable skill.",
+      "family": "partial_scaffold_not_full_skill"
+    },
+    {
+      "text": "Create a reusable-looking checklist, but keep it as a plain note instead of a skill.",
+      "family": "partial_scaffold_not_full_skill"
+    }
   ]
 }

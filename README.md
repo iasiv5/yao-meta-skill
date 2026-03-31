@@ -48,9 +48,10 @@ make test
 
 - `make test` passes locally
 - semantic trigger eval: `0` false positives, `0` false negatives on the current regression set
-- eval suite: train / dev / holdout all pass
+- eval suite: train / dev / holdout all pass, with family-based reporting
 - packaging validation: `openai`, `claude`, and `generic` targets pass contract checks
 - packaging failure fixtures: invalid metadata, invalid YAML, and unsupported targets fail as expected
+- failure library regressions: anti-pattern families pass automated checks
 
 ## What It Does
 
@@ -111,7 +112,7 @@ Long-form material that should not bloat the main skill file. This includes desi
 Utility scripts that make the meta-skill operational:
 
 - `trigger_eval.py`: evaluates trigger descriptions with semantic intent concepts, explicit exclusions, and near-neighbor prompts
-- `run_eval_suite.py`: runs train/dev/holdout trigger suites and fails if aggregate regressions appear
+- `run_eval_suite.py`: runs train/dev/holdout trigger suites, reports family-level regressions, and fails if aggregate regressions appear
 - `context_sizer.py`: estimates context weight and warns when the initial load gets too large
 - `cross_packager.py`: builds client-specific export artifacts with explicit platform contracts and validation
 - `init_skill.py`, `lint_skill.py`, `validate_skill.py`, `diff_eval.py`: minimal authoring toolchain
@@ -135,7 +136,7 @@ Continuous integration entrypoint that runs the full local regression suite on p
 - Train/dev/holdout trigger suites now separate iterative tuning from final verification.
 - Packaging validation now uses explicit contracts and YAML parsing, but it is still a lightweight local validation layer rather than a full platform integration suite.
 - `evals/failure-cases.md` captures known weak spots that should remain part of regression checks.
-- `failures/` captures reusable anti-pattern writeups for routing, packaging, and authoring failures.
+- `failures/` captures reusable anti-pattern writeups and machine-runnable failure cases for routing, packaging, and authoring failures.
 - `tests/verify_packager_failures.py` checks that invalid metadata, invalid YAML, and unsupported targets fail clearly.
 
 ### `templates/`
@@ -207,6 +208,7 @@ This project is best for:
 - Examples: [examples/README.md](examples/README.md)
 - Evals: [evals/README.md](evals/README.md)
 - Failure library: [failures/README.md](failures/README.md)
+- Failure regression check: [verify_failure_regressions.py](tests/verify_failure_regressions.py)
 - Packaging contracts: [references/packaging-contracts.md](references/packaging-contracts.md)
 - Platform capability matrix: [references/platform-capability-matrix.md](references/platform-capability-matrix.md)
 - Failure fixtures: [tests/fixtures](tests/fixtures)

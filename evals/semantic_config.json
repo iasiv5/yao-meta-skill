@@ -108,6 +108,8 @@
         "explain what",
         "just explain",
         "explain it",
+        "explain this",
+        "in simpler language",
         "tell me what it means",
         "plain english"
       ]
@@ -162,9 +164,14 @@
         "do not generate any skill files",
         "not a reusable skill",
         "not as an agent skill",
+        "not an agent skill",
+        "without turning them into an agent skill",
         "do not turn it into a skill",
+        "do not package it",
         "stop short of making a full skill",
         "not a skill yet",
+        "plain note",
+        "keep it as a plain note",
         "no packaging needed"
       ]
     },
@@ -174,6 +181,9 @@
       "phrases": [
         "readme",
         "document",
+        "document package",
+        "reusable-looking document",
+        "wiki",
         "article",
         "blog title",
         "headline",
