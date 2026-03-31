@@ -8,7 +8,9 @@ Contents:
 - `train/`, `dev/`, `holdout/`: split trigger suites for iterative tuning and final verification
 - `blind_holdout/`: description-optimization acceptance prompts that do not participate in candidate ranking
 - `adversarial/`: harder route-collision prompts for description optimization, including noisy positives and deceptive non-trigger requests
+- `confusion/`: sibling-skill routing prompts used to catch route theft and false `no_route` decisions
 - `semantic_config.json`: local semantic-intent concepts, exclusions, and weights
+- `promotion_policy.md`: formal rules for when a route is promotable
 - `baseline_description.txt`: intentionally weaker trigger description
 - `improved_description.txt`: current stronger trigger description
 - `sample_trigger_report.json`: example comparison output using the current recommended threshold
@@ -24,9 +26,12 @@ python3 scripts/trigger_eval.py --description-file evals/improved_description.tx
 python3 scripts/trigger_eval.py --description-file evals/improved_description.txt --cases evals/trigger_cases.json --baseline-description-file evals/baseline_description.txt
 python3 scripts/run_eval_suite.py
 python3 scripts/run_description_optimization_suite.py --history-snapshot-output evals/history/description_optimization/YYYY-MM-DD-adversarial-calibration-and-family-drift.json --snapshot-date YYYY-MM-DD --snapshot-id adversarial-calibration-and-family-drift --snapshot-label "Adversarial Calibration And Family Drift"
+python3 scripts/build_confusion_matrix.py --history-snapshot-output evals/history/YYYY-MM-DD-route-scorecard-foundation.json --snapshot-date YYYY-MM-DD --snapshot-id route-scorecard-foundation --snapshot-label "Route Scorecard Foundation"
 python3 scripts/render_eval_dashboard.py
 python3 scripts/render_description_drift_history.py
+python3 scripts/render_iteration_ledger.py
 python3 tests/verify_description_optimization.py
+python3 tests/verify_route_confusion.py
 python3 tests/verify_failure_regressions.py
 python3 scripts/cross_packager.py . --platform openai --platform claude --expectations evals/packaging_expectations.json --zip
 python3 tests/verify_packager_failures.py

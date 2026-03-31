@@ -65,6 +65,34 @@ Treat important skills as maintained assets with owners, cadence, and lifecycle 
 - broader external benchmark evidence
 - deeper library governance workflows
 
+## Four-Dimension Sprint
+
+The current sprint is aimed at the four dimensions that most directly determine whether this project can challenge first-tier skill-creation systems.
+
+### Trigger
+
+- route confusion matrix
+- contrastive route testing across sibling skills
+- mutation-based and adversarial route families
+
+### Method
+
+- promotion policy
+- explicit gate-selection doctrine
+- non-skill decision rules for when packaging should not happen
+
+### Execution
+
+- one-command route scorecard generation
+- iteration ledger that shows current route quality and optimization evidence
+- validation hooks that fail on route ambiguity or route theft
+
+### Iteration
+
+- blind and adversarial drift history
+- promotion rules for visible holdout, blind holdout, adversarial holdout, and route confusion
+- versioned scorecards that show why a route should or should not be promoted
+
 ## Acceptance Criteria
 
 The project is only world-class if it remains:

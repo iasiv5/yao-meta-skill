@@ -99,6 +99,8 @@ Full reports: [reports/eval_suite.json](reports/eval_suite.json) and [reports/fa
 - quality density: root `131.4`, complex benchmark `164.6`, governed benchmark `171.1`
 - regression milestones are tracked in [reports/regression_history.md](reports/regression_history.md)
 - description drift history is tracked in [reports/description_drift_history.md](reports/description_drift_history.md)
+- route confusion is tracked in [reports/route_scorecard.md](reports/route_scorecard.md)
+- promotion evidence is summarized in [reports/iteration_ledger.md](reports/iteration_ledger.md)
 - context budget summaries are tracked in [reports/context_budget.md](reports/context_budget.md)
 
 ## What It Does
@@ -164,6 +166,8 @@ Utility scripts that make the meta-skill operational:
 - `optimize_description.py`: generates candidate descriptions, scores them on dev, visible holdout, blind holdout, and adversarial holdout suites, then reports calibration and family health
 - `run_description_optimization_suite.py`: runs description optimization across the root skill and governed examples, then writes reusable reports and optional drift snapshots with calibration and family summaries
 - `render_description_drift_history.py`: turns description-optimization snapshots into a readable drift-history report
+- `build_confusion_matrix.py`: scores route confusion across tracked sibling skills and `no_route` cases, then writes a route scorecard and optional milestone snapshot
+- `render_iteration_ledger.py`: compresses regression milestones, description optimization drift, and route scorecards into one iteration-facing ledger
 - `context_sizer.py`: estimates context weight and warns when the initial load gets too large
 - `resource_boundary_check.py`: audits whether detail is split across `SKILL.md`, `references/`, `scripts/`, `assets/`, and `evals/` appropriately
 - `governance_check.py`: validates owner, review cadence, lifecycle stage, and maturity metadata
@@ -175,6 +179,8 @@ Utility scripts that make the meta-skill operational:
 ### `evals/`
 
 Reusable trigger and packaging checks, including baseline and improved descriptions for comparison plus the root semantic configuration that drives description optimization.
+
+This directory also contains route confusion fixtures and promotion policy rules for deciding when a route is promotable.
 
 ### `examples/`
 
@@ -191,6 +197,8 @@ Continuous integration entrypoint that runs the full local regression suite on p
 - Train/dev/holdout trigger suites now separate iterative tuning from final verification.
 - Description optimization now uses dev for ranking, visible holdout for non-regression, blind holdout for acceptance, and adversarial holdout for harder route-collision checks without feeding the ranking loop.
 - Description drift history now records adversarial calibration gaps and family coverage, so routing changes can be judged on confidence and family stability rather than raw error counts alone.
+- Route confusion is now tracked explicitly across the root meta-skill, frontend review skill, governed incident skill, and `no_route` cases, so route theft is visible instead of implicit.
+- Promotion policy now requires visible holdout, blind holdout, adversarial holdout, and route confusion to stay clean before a description should be considered promotable.
 - Packaging validation now uses explicit contracts and YAML parsing, but it is still a lightweight local validation layer rather than a full platform integration suite.
 - `evals/failure-cases.md` captures known weak spots that should remain part of regression checks.
 - `failures/` captures reusable anti-pattern writeups and machine-runnable failure cases for routing, packaging, and authoring failures.

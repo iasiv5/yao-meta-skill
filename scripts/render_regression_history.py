@@ -15,16 +15,19 @@ def render_markdown(snapshots: list[dict]) -> str:
     lines = [
         "# Regression History",
         "",
-        "| Date | Label | Cases | Families | FP | FN | Governance | Governed Examples | Notes |",
-        "| --- | --- | ---: | ---: | ---: | ---: | ---: | ---: | --- |",
+        "| Date | Label | Cases | Families | FP | FN | Route Accuracy | Governance | Governed Examples | Notes |",
+        "| --- | --- | ---: | ---: | ---: | ---: | ---: | ---: | ---: | --- |",
     ]
     for snapshot in snapshots:
         summary = snapshot["trigger_summary"]
         notes = "; ".join(snapshot.get("notes", []))
         score = snapshot.get("governance_score")
         score_display = "-" if score is None else str(score)
+        route_summary = snapshot.get("route_summary") or {}
+        route_accuracy = route_summary.get("accuracy")
+        route_display = "-" if route_accuracy is None else str(route_accuracy)
         lines.append(
-            f"| {snapshot['date']} | {snapshot['label']} | {summary['total_cases']} | {summary['family_count']} | {summary['false_positives']} | {summary['false_negatives']} | {score_display} | {snapshot.get('governed_examples', 0)} | {notes} |"
+            f"| {snapshot['date']} | {snapshot['label']} | {summary['total_cases']} | {summary['family_count']} | {summary['false_positives']} | {summary['false_negatives']} | {route_display} | {score_display} | {snapshot.get('governed_examples', 0)} | {notes} |"
         )
     return "\n".join(lines) + "\n"
 
