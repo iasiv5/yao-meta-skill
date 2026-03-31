@@ -5,6 +5,7 @@ This directory makes trigger quality and packaging quality more reproducible.
 Contents:
 
 - `trigger_cases.json`: positive, negative, and near-neighbor prompts
+- `train/`, `dev/`, `holdout/`: split trigger suites for iterative tuning and final verification
 - `baseline_description.txt`: intentionally weaker trigger description
 - `improved_description.txt`: current stronger trigger description
 - `sample_trigger_report.json`: example comparison output using threshold `0.35`
@@ -16,6 +17,7 @@ Use:
 ```bash
 python3 scripts/trigger_eval.py --description-file evals/improved_description.txt --cases evals/trigger_cases.json --threshold 0.35
 python3 scripts/trigger_eval.py --description-file evals/improved_description.txt --cases evals/trigger_cases.json --baseline-description-file evals/baseline_description.txt --threshold 0.35
+python3 scripts/run_eval_suite.py
 python3 scripts/cross_packager.py . --platform openai --platform claude --expectations evals/packaging_expectations.json --zip
 python3 tests/verify_packager_failures.py
 ```
@@ -28,3 +30,4 @@ Regression scope now includes:
 - long-context positives
 - mixed-intent negatives
 - explicit "do not build a skill" negatives
+- holdout verification

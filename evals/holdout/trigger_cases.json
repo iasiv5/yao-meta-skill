@@ -1,0 +1,23 @@
+{
+  "recommended_threshold": 0.37,
+  "negative_patterns": [
+    "one-off",
+    "do not turn",
+    "without building",
+    "brainstorm",
+    "just explain",
+    "headline",
+    "summarize"
+  ],
+  "should_trigger": [
+    "Build a reusable skill from this long internal process note, and make sure it has references, scripts, and a trigger description.",
+    "Take this existing skill draft, tighten the trigger boundary, add near-neighbor evals, and package it for distribution."
+  ],
+  "should_not_trigger": [
+    "I pasted a long process description below, but I only want a summary, not a reusable skill."
+  ],
+  "near_neighbor": [
+    "Help me shape an idea before we decide whether to build a skill.",
+    "Create an outline for a possible future skill, but do not build the skill yet."
+  ]
+}

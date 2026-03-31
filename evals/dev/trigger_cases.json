@@ -1,0 +1,27 @@
+{
+  "recommended_threshold": 0.37,
+  "negative_patterns": [
+    "one-off",
+    "do not turn",
+    "without building",
+    "brainstorm",
+    "just explain",
+    "headline",
+    "summarize"
+  ],
+  "should_trigger": [
+    "Convert this operations checklist into a reusable skill.",
+    "Add trigger evals to this skill before sharing it with the team.",
+    "We have a messy release runbook, export process, and a prompt history; turn all of that into one reusable skill package with evals and packaging checks."
+  ],
+  "should_not_trigger": [
+    "Give me ideas for improving our process.",
+    "Review this note and tell me what it means in plain English.",
+    "Help me brainstorm several ways to improve packaging, but do not generate any skill files."
+  ],
+  "near_neighbor": [
+    "Review this process note and explain it, no packaging needed.",
+    "Turn this into a checklist and template, but stop short of making a full skill.",
+    "Package this explanation as a document, not as an agent skill."
+  ]
+}

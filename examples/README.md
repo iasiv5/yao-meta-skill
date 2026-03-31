@@ -13,3 +13,7 @@ Each example contains:
 - `raw-workflow.md`: what the user originally gives
 - `design-summary.md`: how the meta-skill scopes and structures the result
 - `generated-skill/`: the resulting skill package shape
+
+Additional evolution example:
+
+- `evolution-frontend-review/`: shows raw workflow, v0, v1, final, and eval delta
