@@ -1,0 +1,17 @@
+{
+  "ok": true,
+  "failures": [],
+  "warnings": [],
+  "stats": {
+    "context_budget_tier": "production",
+    "context_budget_limit": 1000,
+    "skill_body_tokens": 897,
+    "other_text_tokens": 96554,
+    "estimated_initial_load_tokens": 988,
+    "estimated_total_text_tokens": 97451,
+    "relevant_file_count": 86,
+    "unused_resource_dirs": [],
+    "quality_signal_points": 130,
+    "quality_density": 131.6
+  }
+}

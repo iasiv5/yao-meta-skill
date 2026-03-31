@@ -27,6 +27,7 @@ The governed example adds:
 - explicit lifecycle and maturity metadata
 - review policy and governed ownership
 - reports for maturity and revision history
+- context budget evidence
 - a stronger example of how reusable skills become maintained assets
 
 Additional evolution example:

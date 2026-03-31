@@ -5,6 +5,21 @@ from pathlib import Path
 
 
 TEXT_EXTS = {".md", ".txt", ".yaml", ".yml", ".json", ".py", ".sh", ".js", ".ts"}
+PACKAGE_PATHS = (
+    "SKILL.md",
+    "manifest.json",
+    "agents",
+    "references",
+    "scripts",
+    "assets",
+    "evals",
+    "templates",
+    "reports",
+    "failures",
+    "tests",
+    "input",
+    "outputs",
+)
 
 
 def estimate_tokens(text: str) -> int:
@@ -23,6 +38,8 @@ def classify(path: Path) -> str:
     parts = set(path.parts)
     if path.name == "SKILL.md":
         return "skill_body"
+    if "agents" in parts:
+        return "interface"
     if "references" in parts:
         return "reference"
     if "scripts" in parts:
@@ -38,8 +55,18 @@ def summarize(skill_dir: Path) -> dict:
     files = []
     total_tokens = 0
     initial_tokens = 0
-    for path in sorted(skill_dir.rglob("*")):
-        if not path.is_file():
+    candidate_files = []
+    for entry in PACKAGE_PATHS:
+        path = skill_dir / entry
+        if path.is_file():
+            candidate_files.append(path)
+        elif path.is_dir():
+            candidate_files.extend(sorted(file for file in path.rglob("*") if file.is_file()))
+
+    for path in candidate_files:
+        if path.suffix not in TEXT_EXTS and path.name != "SKILL.md":
+            size = path.stat().st_size
+            files.append({"path": str(path.relative_to(skill_dir)), "kind": "binary_or_other", "bytes": size})
             continue
         kind = classify(path)
         if kind in {"binary_or_other", "asset"} and path.suffix not in TEXT_EXTS:
@@ -56,7 +83,8 @@ def summarize(skill_dir: Path) -> dict:
         }
         files.append(record)
         total_tokens += tokens
-        if kind in {"skill_body", "other_text"}:
+        rel = path.relative_to(skill_dir)
+        if rel == Path("SKILL.md") or (rel.parts and rel.parts[0] == "agents"):
             initial_tokens += tokens
     return {
         "skill_dir": str(skill_dir),

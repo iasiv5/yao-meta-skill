@@ -39,6 +39,26 @@ def require_min_score(case: dict, minimum: int) -> None:
     case["passed"] = case["passed"] and score is not None and score >= minimum
 
 
+def require_context_targets(case: dict, max_initial: int, min_density: float) -> None:
+    stats = case.get("payload", {}).get("stats", {})
+    initial = stats.get("estimated_initial_load_tokens")
+    density = stats.get("quality_density")
+    unused = stats.get("unused_resource_dirs", [])
+    case["max_initial_load"] = max_initial
+    case["observed_initial_load"] = initial
+    case["minimum_quality_density"] = min_density
+    case["observed_quality_density"] = density
+    case["unused_resource_dirs"] = unused
+    case["passed"] = (
+        case["passed"]
+        and initial is not None
+        and density is not None
+        and initial <= max_initial
+        and density >= min_density
+        and not unused
+    )
+
+
 def main() -> None:
     python = sys.executable
     cases = []
@@ -50,23 +70,31 @@ def main() -> None:
     require_min_score(root_governance, 90)
     cases.append(root_governance)
 
+    root_resource = run(
+        "root_resource_boundaries",
+        [python, "scripts/resource_boundary_check.py", str(ROOT)],
+    )
+    require_context_targets(root_resource, 1000, 100.0)
+    cases.append(root_resource)
+
+    complex_resource = run(
+        "complex_example_resource_boundaries",
+        [python, "scripts/resource_boundary_check.py", str(ROOT / "examples" / "complex-release-orchestrator" / "generated-skill")],
+    )
+    require_context_targets(complex_resource, 1000, 120.0)
+
+    governed_resource = run(
+        "governed_example_resource_boundaries",
+        [python, "scripts/resource_boundary_check.py", str(ROOT / "examples" / "governed-incident-command" / "generated-skill")],
+    )
+    require_context_targets(governed_resource, 1000, 120.0)
+
     cases.extend([
-        run(
-            "root_resource_boundaries",
-            [python, "scripts/resource_boundary_check.py", str(ROOT)],
-        ),
         run(
             "complex_example_governance",
             [python, "scripts/governance_check.py", str(ROOT / "examples" / "complex-release-orchestrator" / "generated-skill"), "--require-manifest"],
         ),
-        run(
-            "complex_example_resource_boundaries",
-            [python, "scripts/resource_boundary_check.py", str(ROOT / "examples" / "complex-release-orchestrator" / "generated-skill")],
-        ),
-        run(
-            "governed_example_resource_boundaries",
-            [python, "scripts/resource_boundary_check.py", str(ROOT / "examples" / "governed-incident-command" / "generated-skill")],
-        ),
+        complex_resource,
         run(
             "invalid_governance_manifest",
             [python, "scripts/governance_check.py", str(ROOT / "tests" / "fixtures" / "governance_invalid_manifest"), "--require-manifest"],
@@ -86,6 +114,7 @@ def main() -> None:
     )
     require_min_score(governed_example, 90)
     cases.insert(4, governed_example)
+    cases.insert(5, governed_resource)
 
     report = {"ok": all(case["passed"] for case in cases), "cases": cases}
     print(json.dumps(report, ensure_ascii=False, indent=2))

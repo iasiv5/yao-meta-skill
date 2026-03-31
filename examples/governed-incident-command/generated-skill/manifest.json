@@ -6,6 +6,7 @@
   "status": "active",
   "maturity_tier": "governed",
   "lifecycle_stage": "governed",
+  "context_budget_tier": "production",
   "review_cadence": "monthly",
   "category": "operations",
   "complexity_tier": "complex",

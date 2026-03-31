@@ -6,6 +6,17 @@ This spec defines where information belongs inside a skill package.
 
 Keep the main skill small enough to route and execute clearly. Move detail out of `SKILL.md` as soon as it stops helping routing or branch selection.
 
+## Context Budget Tiers
+
+Use the lightest budget that still fits the package.
+
+- `scaffold`: `700` initial-load tokens
+- `production`: `1000` initial-load tokens
+- `library`: `1300` initial-load tokens
+- `governed`: `1300` initial-load tokens
+
+If `manifest.json` sets `context_budget_tier`, that tier overrides the default budget derived from lifecycle or maturity metadata. This allows a high-governance skill to keep a stricter initial-load budget than its lifecycle label alone would imply.
+
 ## Placement Rules
 
 ### Put content in `SKILL.md` when it is:
@@ -48,6 +59,7 @@ Avoid these:
 - adding `scripts/` for logic that is still best expressed in prose
 - adding `evals/` for one-off or disposable skills
 - creating every folder by default even when empty
+- keeping folders that are neither referenced in `SKILL.md` nor declared as factory components
 
 ## Heuristics
 
@@ -71,6 +83,31 @@ Avoid these:
 
 - should exist when routing or quality claims need to be defended
 - should be skipped for disposable personal drafts
+
+## Unused Resource Detection
+
+`resource_boundary_check.py` warns when a non-empty optional directory appears decorative:
+
+- the directory exists and contains files
+- the main `SKILL.md` does not reference it
+- and the directory is not declared in `manifest.json` factory components
+
+This protects the package from looking more sophisticated than it actually is.
+
+## Quality Density
+
+The checker also reports `quality_density`, a local signal for how much governance and quality evidence is packed into the initial load budget.
+
+It combines:
+
+- governance score
+- presence of evals
+- presence of reports
+- references and scripts
+- interface and manifest metadata
+- failure or test evidence
+
+Higher density means the package is staying lean while still proving quality.
 
 ## Quality Intent
 

@@ -6,6 +6,7 @@
   "status": "active",
   "maturity_tier": "production",
   "lifecycle_stage": "production",
+  "context_budget_tier": "production",
   "review_cadence": "quarterly",
   "category": "operations",
   "complexity_tier": "complex",
@@ -14,6 +15,7 @@
     "scripts",
     "evals",
     "input",
-    "outputs"
+    "outputs",
+    "reports"
   ]
 }

@@ -1,6 +1,6 @@
 ---
 name: yao-meta-skill
-description: Create, refactor, evaluate, and package agent skills from workflows, transcripts, prompts, docs, or rough notes. Use when asked to create a skill, turn a repeated process into a reusable skill, improve an existing skill, optimize skill triggering, add evals, or prepare a skill for team reuse. Relevant for meta-skills, skill factories, skill templates, skill QA, and cross-platform skill packaging.
+description: Create, refactor, evaluate, and package agent skills from workflows, prompts, transcripts, docs, or notes. Use when asked to create a skill, turn a repeated process into a reusable skill, improve an existing skill, add evals, or package a skill for team reuse.
 metadata:
   author: Yao Team
   philosophy: "structured design, evaluation loop, template ergonomics, operational packaging"
@@ -8,158 +8,41 @@ metadata:
 
 # Yao Meta Skill
 
-Build skills as reusable products, not long prompts.
+Build reusable skill packages, not long prompts.
 
-## Core Rules
+## Router Rules
 
-- Treat a skill as a maintained capability package.
-- Write the frontmatter `description` early; it is the main trigger surface.
-- Keep `SKILL.md` lean. Put detail in `references/`, deterministic logic in `scripts/`, and output artifacts in `assets/`.
-- Use the lightest process that still protects quality.
-- Package for reuse only when the user actually needs reuse.
+- Route by the frontmatter `description` first; it is the main trigger surface.
+- Keep `SKILL.md` as router plus execution skeleton only.
+- Put long guidance in `references/`, deterministic logic in `scripts/`, static artifacts in `assets/`, and generated evidence in `reports/`.
+- Use the lightest process that still makes the skill reliable.
+- Package for reuse only when reuse is real.
 
 ## Use Cases
 
-Use this skill to:
-
 - create a new skill
-- turn a workflow, runbook, transcript, or prompt set into a skill
-- improve a skill's boundary, description, evals, or packaging
-- design a team skill template or skill-library standard
-- migrate a skill toward the Agent Skills open format
+- turn a workflow, runbook, or prompt set into a skill
+- improve a skill's boundary, evals, or packaging
+- design a team skill template or standard
+- migrate a skill toward the open format
 
 ## Modes
 
-Choose the lightest mode that fits.
+- `Scaffold`: personal or exploratory; deliver `SKILL.md`, `agents/interface.yaml`, and only clearly needed folders.
+- `Production`: reusable team skill; add focused `references/`, `scripts/`, and `evals/` only when they earn their keep.
+- `Library`: important shared or meta skill; add trigger matrices, packaging guidance, and maintenance metadata.
 
-### Scaffold
+Detailed mode rules: [Operating Modes](references/operating-modes.md), [QA Ladder](references/qa-ladder.md), [Resource Boundary Spec](references/resource-boundaries.md).
 
-Use for exploratory or personal skills.
+## Compact Workflow
 
-Deliver:
+1. Capture the recurring job, outputs, trigger phrases, and risk.
+2. Set one coherent boundary: one capability family, one trigger surface, one workflow.
+3. Write the `description` early and add positives, negatives, and near neighbors for important skills.
+4. Generate only the folders that earn their keep. Start from the basic template unless complexity is real.
+5. Run the smallest useful gates: `context_sizer.py`, `resource_boundary_check.py`, `governance_check.py`, `trigger_eval.py`, `cross_packager.py`.
 
-- `SKILL.md`
-- `agents/interface.yaml`
-- `references/` only if clearly needed
-
-### Production
-
-Use for reusable team skills.
-
-Deliver:
-
-- concise package structure
-- focused `references/`
-- `scripts/` when prose would be brittle or repetitive
-- `evals/` when output quality can be checked
-
-### Library
-
-Use for important organizational skills or meta-skills.
-
-Add:
-
-- trigger positives, negatives, and near neighbors
-- revision rubric
-- packaging guidance
-- maintenance metadata when useful
-
-## Factory Components
-
-Use these when they materially improve quality:
-
-- `templates/basic_skill.md.j2`
-- `templates/complex_skill.md.j2`
-- `scripts/trigger_eval.py`
-- `scripts/context_sizer.py`
-- `scripts/cross_packager.py`
-- `scripts/governance_check.py`
-- `scripts/resource_boundary_check.py`
-
-## Workflow
-
-### 1. Capture the real job
-
-Infer:
-
-- the recurring task or decision
-- likely trigger phrases and contexts
-- expected outputs
-- what must be deterministic
-- whether the skill is personal, team, or cross-platform
-
-Keep discovery lean. Default to no more than two clarification rounds unless guessing is risky.
-
-### 2. Set the boundary
-
-One skill should usually have:
-
-- one capability family
-- one trigger surface
-- one coherent workflow
-
-Split oversized skills. Move variants into `references/` or sibling skills.
-
-### 3. Design the trigger
-
-The `description` should say:
-
-- what the skill does
-- when to use it
-- phrases, artifacts, or file types that should trigger it
-- adjacent cases that are easy to miss
-
-For important skills, create `should_trigger`, `should_not_trigger`, and near-neighbor prompts. Use `scripts/trigger_eval.py` when helpful.
-
-### 4. Write the package
-
-Default structure:
-
-```text
-skill-name/
-├── SKILL.md
-├── agents/interface.yaml
-├── references/
-├── scripts/
-├── assets/
-└── evals/
-```
-
-Only create folders that earn their keep. Start from the basic template unless the skill clearly needs the complex one.
-
-### 5. Add quality gates
-
-Use the minimum useful QA:
-
-- basic: structure and naming check
-- standard: realistic prompts and expected outcomes
-- advanced: trigger evals, benchmark comparisons, revision loop
-
-For production or library-grade skills, run `scripts/context_sizer.py` before finalizing.
-Run `scripts/resource_boundary_check.py` when package sprawl or misplaced detail is a risk.
-Run `scripts/governance_check.py` when the skill is intended to be a maintained shared asset.
-
-### 6. Package for reuse
-
-If team reuse matters, include:
-
-- stable folder name
-- aligned `agents/interface.yaml`
-- minimal tool assumptions
-- version or maintenance metadata when useful
-- target-specific packaging only for requested platforms
-
-Use `scripts/cross_packager.py` when packaging artifacts are needed.
-
-### 7. Report the result
-
-Summarize:
-
-- what was packaged
-- what trigger surface was chosen
-- what was excluded
-- what quality gates exist
-- what should be improved next
+Detailed playbooks: [Operating Modes](references/operating-modes.md) and [Trigger And Eval Playbook](references/eval-playbook.md).
 
 ## Output Contract
 
@@ -168,16 +51,18 @@ Unless the user asks otherwise, produce:
 1. a working skill directory
 2. a trigger-aware `SKILL.md`
 3. aligned `agents/interface.yaml`
-4. references only where they reduce context bloat
-5. optional scripts, evals, and `manifest.json` when justified
+4. references, scripts, evals, reports, and `manifest.json` only when justified
+5. a short summary of boundary, exclusions, gates, and next steps
 
 ## Reference Map
 
+- [Operating Modes](references/operating-modes.md)
+- [QA Ladder](references/qa-ladder.md)
+- [Governance Model](references/governance.md)
+- [Resource Boundary Spec](references/resource-boundaries.md)
 - [Skill Design Guidelines](references/skill_design_guidelines.md)
 - [Client Compatibility](references/client-compatibility.md)
 - [Comparative Analysis](references/comparative-analysis.md)
 - [Meta-Skill Rubric](references/design-rubric.md)
 - [Skill Template](references/skill-template.md)
 - [Trigger And Eval Playbook](references/eval-playbook.md)
-- [Governance Model](references/governance.md)
-- [Resource Boundary Spec](references/resource-boundaries.md)

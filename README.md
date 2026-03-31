@@ -93,7 +93,10 @@ Full reports: [reports/eval_suite.json](reports/eval_suite.json) and [reports/fa
 - failure library regressions: anti-pattern families pass automated checks
 - governance and resource-boundary checks are part of the default test path
 - root governance maturity score: `90/100`; governed benchmark example: `95/100`
+- context budgets: root `988/1000`, complex benchmark `790/1000`, governed benchmark `817/1000`
+- quality density: root `131.6`, complex benchmark `145.6`, governed benchmark `159.1`
 - regression milestones are tracked in [reports/regression_history.md](reports/regression_history.md)
+- context budget summaries are tracked in [reports/context_budget.md](reports/context_budget.md)
 
 ## What It Does
 
@@ -158,6 +161,7 @@ Utility scripts that make the meta-skill operational:
 - `context_sizer.py`: estimates context weight and warns when the initial load gets too large
 - `resource_boundary_check.py`: audits whether detail is split across `SKILL.md`, `references/`, `scripts/`, `assets/`, and `evals/` appropriately
 - `governance_check.py`: validates owner, review cadence, lifecycle stage, and maturity metadata
+- `render_context_reports.py`: generates root and example context-budget reports plus a shared context summary
 - `render_regression_history.py`: turns milestone snapshots into a readable regression history report
 - `cross_packager.py`: builds client-specific export artifacts with explicit platform contracts and validation
 - `init_skill.py`, `lint_skill.py`, `validate_skill.py`, `diff_eval.py`: minimal authoring toolchain
@@ -186,6 +190,8 @@ Continuous integration entrypoint that runs the full local regression suite on p
 - Governance metadata and resource-boundary rules now have runnable checks instead of staying as prose only.
 - Governance checks now emit a maturity score so governed assets can be compared instead of only pass/fail checked.
 - Declared maturity tiers are checked against recommended minimum governance scores, so `production`, `library`, and `governed` assets can be compared without forcing every strong example into the same label.
+- Context budgets are now tiered and explicit, so a governed skill can still choose a stricter `production`-sized initial-load budget.
+- Resource-boundary checks now detect decorative directories and compute a local quality-density signal instead of only checking raw token counts.
 
 ### `templates/`
 
