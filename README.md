@@ -125,8 +125,11 @@ This project is best for:
 
 ## Documentation
 
-- Chinese introduction: [docs/README.zh-CN.md](docs/README.zh-CN.md)
-- Japanese introduction: [docs/README.ja-JP.md](docs/README.ja-JP.md)
+- English: [README.md](README.md)
+- 中文: [docs/README.zh-CN.md](docs/README.zh-CN.md)
+- 日本語: [docs/README.ja-JP.md](docs/README.ja-JP.md)
+- Français: [docs/README.fr-FR.md](docs/README.fr-FR.md)
+- Русский: [docs/README.ru-RU.md](docs/README.ru-RU.md)
 
 ## License
 
