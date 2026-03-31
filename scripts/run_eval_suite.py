@@ -17,6 +17,8 @@ def run_case(script: Path, description: Path, baseline: Path, cases: Path) -> di
             str(baseline),
             "--cases",
             str(cases),
+            "--semantic-config",
+            str(Path("evals/semantic_config.json").resolve()),
         ],
         capture_output=True,
         text=True,
@@ -27,7 +29,7 @@ def run_case(script: Path, description: Path, baseline: Path, cases: Path) -> di
 
 
 def main() -> None:
-    parser = argparse.ArgumentParser(description="Run trigger evaluation across train/dev/holdout suites.")
+    parser = argparse.ArgumentParser(description="Run semantic trigger evaluation across train/dev/holdout suites.")
     parser.add_argument("--eval-dir", default="evals", help="Root eval directory")
     parser.add_argument("--description-file", default="evals/improved_description.txt")
     parser.add_argument("--baseline-description-file", default="evals/baseline_description.txt")

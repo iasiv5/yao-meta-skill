@@ -1,5 +1,5 @@
 {
-  "recommended_threshold": 0.37,
+  "recommended_threshold": 0.33,
   "negative_patterns": [
     "one-off",
     "do not turn",

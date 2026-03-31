@@ -1,0 +1,15 @@
+{
+  "name": "release-orchestrator",
+  "version": "1.0.0",
+  "owner": "Yao Team",
+  "updated_at": "2026-03-31",
+  "category": "operations",
+  "complexity_tier": "complex",
+  "factory_components": [
+    "references",
+    "scripts",
+    "evals",
+    "input",
+    "outputs"
+  ]
+}

@@ -1,37 +1,1527 @@
 {
-  "threshold": 0.42,
-  "threshold_explanation": "Prompts at or above the threshold are treated as trigger matches. Final scores combine token overlap, positive-token bonuses, negative-token penalties, and explicit negative-pattern penalties. Scores near the threshold should be reviewed as boundary cases.",
+  "threshold": 0.33,
+  "threshold_explanation": "Prompts at or above the threshold are treated as trigger matches. Scores are driven primarily by semantic intent coverage: packaging intent, workflow-to-skill transformation intent, reuse/distribution intent, and eval intent. Explicit exclusions such as summary-only, translation-only, one-off, document-only, or do-not-build directives apply direct penalties and can override otherwise similar wording.",
   "false_positives": 0,
   "false_negatives": 0,
   "precision": 1.0,
   "recall": 1.0,
   "bucket_stats": {
     "should_trigger": {
-      "total": 8,
-      "passed": 8,
+      "total": 11,
+      "passed": 11,
       "pass_rate": 1.0
     },
     "should_not_trigger": {
-      "total": 7,
-      "passed": 7,
+      "total": 10,
+      "passed": 10,
       "pass_rate": 1.0
     },
     "near_neighbor": {
-      "total": 7,
-      "passed": 7,
+      "total": 10,
+      "passed": 10,
       "pass_rate": 1.0
     }
   },
+  "family_stats": {
+    "default": {
+      "total": 31,
+      "passed": 31,
+      "false_positives": 0,
+      "false_negatives": 0,
+      "pass_rate": 1.0
+    }
+  },
+  "misfires": [],
+  "results": {
+    "should_trigger": [
+      {
+        "prompt": "Create a skill from this repeated workflow.",
+        "family": "default",
+        "score": 0.549,
+        "predicted_trigger": true,
+        "expected_trigger": true,
+        "passed": true,
+        "score_detail": {
+          "mode": "semantic-intent",
+          "desired_positive_concepts": [
+            "build_skill",
+            "transform_workflow",
+            "reuse_package",
+            "eval_optimize",
+            "iterate_existing_skill",
+            "team_operationalize"
+          ],
+          "matched_desired_concepts": [
+            "build_skill",
+            "transform_workflow"
+          ],
+          "extra_positive_concepts": [],
+          "matched_negative_concepts": [],
+          "exclusive_negative_concepts": [],
+          "semantic_coverage": 0.491,
+          "support_score": 0,
+          "lexical_support": 0.714,
+          "negative_penalty": 0,
+          "coverage_boost": 0.04,
+          "concept_evidence": {
+            "positive": {
+              "build_skill": [
+                "create a skill"
+              ],
+              "transform_workflow": [
+                "workflow"
+              ]
+            },
+            "negative": {}
+          }
+        }
+      },
+      {
+        "prompt": "Improve this skill description and add evals.",
+        "family": "default",
+        "score": 0.353,
+        "predicted_trigger": true,
+        "expected_trigger": true,
+        "passed": true,
+        "score_detail": {
+          "mode": "semantic-intent",
+          "desired_positive_concepts": [
+            "build_skill",
+            "transform_workflow",
+            "reuse_package",
+            "eval_optimize",
+            "iterate_existing_skill",
+            "team_operationalize"
+          ],
+          "matched_desired_concepts": [
+            "eval_optimize",
+            "iterate_existing_skill"
+          ],
+          "extra_positive_concepts": [],
+          "matched_negative_concepts": [],
+          "exclusive_negative_concepts": [],
+          "semantic_coverage": 0.291,
+          "support_score": 0,
+          "lexical_support": 0.571,
+          "negative_penalty": 0,
+          "coverage_boost": 0.04,
+          "concept_evidence": {
+            "positive": {
+              "eval_optimize": [
+                "evals"
+              ],
+              "iterate_existing_skill": [
+                "this skill",
+                "skill description"
+              ]
+            },
+            "negative": {}
+          }
+        },
+        "boundary_case": true
+      },
+      {
+        "prompt": "Turn this runbook into a reusable agent skill.",
+        "family": "default",
+        "score": 0.729,
+        "predicted_trigger": true,
+        "expected_trigger": true,
+        "passed": true,
+        "score_detail": {
+          "mode": "semantic-intent",
+          "desired_positive_concepts": [
+            "build_skill",
+            "transform_workflow",
+            "reuse_package",
+            "eval_optimize",
+            "iterate_existing_skill",
+            "team_operationalize"
+          ],
+          "matched_desired_concepts": [
+            "build_skill",
+            "reuse_package",
+            "transform_workflow"
+          ],
+          "extra_positive_concepts": [],
+          "matched_negative_concepts": [],
+          "exclusive_negative_concepts": [],
+          "semantic_coverage": 0.673,
+          "support_score": 0,
+          "lexical_support": 0.625,
+          "negative_penalty": 0,
+          "coverage_boost": 0.06,
+          "concept_evidence": {
+            "positive": {
+              "build_skill": [
+                "agent skill"
+              ],
+              "reuse_package": [
+                "reusable"
+              ],
+              "transform_workflow": [
+                "runbook"
+              ]
+            },
+            "negative": {}
+          }
+        }
+      },
+      {
+        "prompt": "Package this skill for team reuse.",
+        "family": "default",
+        "score": 0.448,
+        "predicted_trigger": true,
+        "expected_trigger": true,
+        "passed": true,
+        "score_detail": {
+          "mode": "semantic-intent",
+          "desired_positive_concepts": [
+            "build_skill",
+            "transform_workflow",
+            "reuse_package",
+            "eval_optimize",
+            "iterate_existing_skill",
+            "team_operationalize"
+          ],
+          "matched_desired_concepts": [
+            "iterate_existing_skill",
+            "reuse_package",
+            "team_operationalize"
+          ],
+          "extra_positive_concepts": [],
+          "matched_negative_concepts": [],
+          "exclusive_negative_concepts": [],
+          "semantic_coverage": 0.364,
+          "support_score": 0,
+          "lexical_support": 0.667,
+          "negative_penalty": 0,
+          "coverage_boost": 0.06,
+          "concept_evidence": {
+            "positive": {
+              "iterate_existing_skill": [
+                "this skill",
+                "package this skill"
+              ],
+              "reuse_package": [
+                "reuse",
+                "package",
+                "team reuse"
+              ],
+              "team_operationalize": [
+                "team",
+                "team reuse"
+              ]
+            },
+            "negative": {}
+          }
+        }
+      },
+      {
+        "prompt": "Convert this operations checklist into a reusable skill.",
+        "family": "default",
+        "score": 0.415,
+        "predicted_trigger": true,
+        "expected_trigger": true,
+        "passed": true,
+        "score_detail": {
+          "mode": "semantic-intent",
+          "desired_positive_concepts": [
+            "build_skill",
+            "transform_workflow",
+            "reuse_package",
+            "eval_optimize",
+            "iterate_existing_skill",
+            "team_operationalize"
+          ],
+          "matched_desired_concepts": [
+            "reuse_package",
+            "transform_workflow"
+          ],
+          "extra_positive_concepts": [],
+          "matched_negative_concepts": [],
+          "exclusive_negative_concepts": [],
+          "semantic_coverage": 0.364,
+          "support_score": 0,
+          "lexical_support": 0.5,
+          "negative_penalty": 0,
+          "coverage_boost": 0.04,
+          "concept_evidence": {
+            "positive": {
+              "reuse_package": [
+                "reusable"
+              ],
+              "transform_workflow": [
+                "checklist",
+                "operations checklist"
+              ]
+            },
+            "negative": {}
+          }
+        }
+      },
+      {
+        "prompt": "Refactor this prompt into a proper skill package.",
+        "family": "default",
+        "score": 0.532,
+        "predicted_trigger": true,
+        "expected_trigger": true,
+        "passed": true,
+        "score_detail": {
+          "mode": "semantic-intent",
+          "desired_positive_concepts": [
+            "build_skill",
+            "transform_workflow",
+            "reuse_package",
+            "eval_optimize",
+            "iterate_existing_skill",
+            "team_operationalize"
+          ],
+          "matched_desired_concepts": [
+            "build_skill",
+            "reuse_package"
+          ],
+          "extra_positive_concepts": [],
+          "matched_negative_concepts": [],
+          "exclusive_negative_concepts": [],
+          "semantic_coverage": 0.491,
+          "support_score": 0,
+          "lexical_support": 0.5,
+          "negative_penalty": 0,
+          "coverage_boost": 0.04,
+          "concept_evidence": {
+            "positive": {
+              "build_skill": [
+                "skill package"
+              ],
+              "reuse_package": [
+                "package"
+              ]
+            },
+            "negative": {}
+          }
+        }
+      },
+      {
+        "prompt": "Add trigger evals to this skill before sharing it with the team.",
+        "family": "default",
+        "score": 0.388,
+        "predicted_trigger": true,
+        "expected_trigger": true,
+        "passed": true,
+        "score_detail": {
+          "mode": "semantic-intent",
+          "desired_positive_concepts": [
+            "build_skill",
+            "transform_workflow",
+            "reuse_package",
+            "eval_optimize",
+            "iterate_existing_skill",
+            "team_operationalize"
+          ],
+          "matched_desired_concepts": [
+            "eval_optimize",
+            "iterate_existing_skill",
+            "team_operationalize"
+          ],
+          "extra_positive_concepts": [],
+          "matched_negative_concepts": [],
+          "exclusive_negative_concepts": [],
+          "semantic_coverage": 0.327,
+          "support_score": 0,
+          "lexical_support": 0.333,
+          "negative_penalty": 0,
+          "coverage_boost": 0.06,
+          "concept_evidence": {
+            "positive": {
+              "eval_optimize": [
+                "evals",
+                "trigger evals"
+              ],
+              "iterate_existing_skill": [
+                "this skill",
+                "sharing it with the team",
+                "before sharing it with the team"
+              ],
+              "team_operationalize": [
+                "team",
+                "sharing it with the team"
+              ]
+            },
+            "negative": {}
+          }
+        },
+        "boundary_case": true
+      },
+      {
+        "prompt": "Create a meta-skill for packaging internal workflows.",
+        "family": "default",
+        "score": 0.591,
+        "predicted_trigger": true,
+        "expected_trigger": true,
+        "passed": true,
+        "score_detail": {
+          "mode": "semantic-intent",
+          "desired_positive_concepts": [
+            "build_skill",
+            "transform_workflow",
+            "reuse_package",
+            "eval_optimize",
+            "iterate_existing_skill",
+            "team_operationalize"
+          ],
+          "matched_desired_concepts": [
+            "build_skill",
+            "reuse_package",
+            "team_operationalize"
+          ],
+          "extra_positive_concepts": [],
+          "matched_negative_concepts": [],
+          "exclusive_negative_concepts": [],
+          "semantic_coverage": 0.527,
+          "support_score": 0,
+          "lexical_support": 0.571,
+          "negative_penalty": 0,
+          "coverage_boost": 0.06,
+          "concept_evidence": {
+            "positive": {
+              "build_skill": [
+                "meta skill",
+                "meta-skill"
+              ],
+              "reuse_package": [
+                "packaging",
+                "internal workflows"
+              ],
+              "team_operationalize": [
+                "internal"
+              ]
+            },
+            "negative": {}
+          }
+        }
+      },
+      {
+        "prompt": "We have a messy release runbook, export process, and a prompt history; turn all of that into one reusable skill package with evals and packaging checks.",
+        "family": "default",
+        "score": 0.843,
+        "predicted_trigger": true,
+        "expected_trigger": true,
+        "passed": true,
+        "score_detail": {
+          "mode": "semantic-intent",
+          "desired_positive_concepts": [
+            "build_skill",
+            "transform_workflow",
+            "reuse_package",
+            "eval_optimize",
+            "iterate_existing_skill",
+            "team_operationalize"
+          ],
+          "matched_desired_concepts": [
+            "build_skill",
+            "eval_optimize",
+            "reuse_package",
+            "transform_workflow"
+          ],
+          "extra_positive_concepts": [],
+          "matched_negative_concepts": [],
+          "exclusive_negative_concepts": [],
+          "semantic_coverage": 0.818,
+          "support_score": 0,
+          "lexical_support": 0.375,
+          "negative_penalty": 0,
+          "coverage_boost": 0.06,
+          "concept_evidence": {
+            "positive": {
+              "build_skill": [
+                "skill package",
+                "turn all of that into one reusable skill package"
+              ],
+              "eval_optimize": [
+                "evals",
+                "packaging checks"
+              ],
+              "reuse_package": [
+                "reusable",
+                "package",
+                "packaging"
+              ],
+              "transform_workflow": [
+                "runbook",
+                "process",
+                "prompt history"
+              ]
+            },
+            "negative": {}
+          }
+        }
+      },
+      {
+        "prompt": "Build a reusable skill from this long internal process note, and make sure it has references, scripts, and a trigger description.",
+        "family": "default",
+        "score": 0.468,
+        "predicted_trigger": true,
+        "expected_trigger": true,
+        "passed": true,
+        "score_detail": {
+          "mode": "semantic-intent",
+          "desired_positive_concepts": [
+            "build_skill",
+            "transform_workflow",
+            "reuse_package",
+            "eval_optimize",
+            "iterate_existing_skill",
+            "team_operationalize"
+          ],
+          "matched_desired_concepts": [
+            "reuse_package",
+            "team_operationalize",
+            "transform_workflow"
+          ],
+          "extra_positive_concepts": [
+            "multi_asset"
+          ],
+          "matched_negative_concepts": [],
+          "exclusive_negative_concepts": [],
+          "semantic_coverage": 0.4,
+          "support_score": 0.06,
+          "lexical_support": 0.316,
+          "negative_penalty": 0,
+          "coverage_boost": 0.06,
+          "concept_evidence": {
+            "positive": {
+              "multi_asset": [
+                "references",
+                "scripts"
+              ],
+              "reuse_package": [
+                "reusable"
+              ],
+              "team_operationalize": [
+                "internal"
+              ],
+              "transform_workflow": [
+                "process",
+                "internal process note"
+              ]
+            },
+            "negative": {}
+          }
+        }
+      },
+      {
+        "prompt": "Take this existing skill draft, tighten the trigger boundary, add near-neighbor evals, and package it for distribution.",
+        "family": "default",
+        "score": 0.729,
+        "predicted_trigger": true,
+        "expected_trigger": true,
+        "passed": true,
+        "score_detail": {
+          "mode": "semantic-intent",
+          "desired_positive_concepts": [
+            "build_skill",
+            "transform_workflow",
+            "reuse_package",
+            "eval_optimize",
+            "iterate_existing_skill",
+            "team_operationalize"
+          ],
+          "matched_desired_concepts": [
+            "eval_optimize",
+            "iterate_existing_skill",
+            "reuse_package",
+            "team_operationalize",
+            "transform_workflow"
+          ],
+          "extra_positive_concepts": [],
+          "matched_negative_concepts": [],
+          "exclusive_negative_concepts": [],
+          "semantic_coverage": 0.691,
+          "support_score": 0,
+          "lexical_support": 0.412,
+          "negative_penalty": 0,
+          "coverage_boost": 0.06,
+          "concept_evidence": {
+            "positive": {
+              "eval_optimize": [
+                "evals",
+                "near-neighbor",
+                "trigger boundary"
+              ],
+              "iterate_existing_skill": [
+                "existing skill"
+              ],
+              "reuse_package": [
+                "package",
+                "distribution"
+              ],
+              "team_operationalize": [
+                "distribution"
+              ],
+              "transform_workflow": [
+                "existing skill draft"
+              ]
+            },
+            "negative": {}
+          }
+        }
+      }
+    ],
+    "should_not_trigger": [
+      {
+        "prompt": "Explain what a workflow is.",
+        "family": "default",
+        "score": 0.0,
+        "predicted_trigger": false,
+        "expected_trigger": false,
+        "passed": true,
+        "score_detail": {
+          "mode": "semantic-intent",
+          "desired_positive_concepts": [
+            "build_skill",
+            "transform_workflow",
+            "reuse_package",
+            "eval_optimize",
+            "iterate_existing_skill",
+            "team_operationalize"
+          ],
+          "matched_desired_concepts": [
+            "transform_workflow"
+          ],
+          "extra_positive_concepts": [],
+          "matched_negative_concepts": [
+            "explain_only"
+          ],
+          "exclusive_negative_concepts": [
+            "explain_only"
+          ],
+          "semantic_coverage": 0.182,
+          "support_score": 0,
+          "lexical_support": 0.2,
+          "negative_penalty": 0.26,
+          "coverage_boost": 0.0,
+          "concept_evidence": {
+            "positive": {
+              "transform_workflow": [
+                "workflow"
+              ]
+            },
+            "negative": {
+              "explain_only": [
+                "explain what"
+              ]
+            }
+          }
+        }
+      },
+      {
+        "prompt": "Write a product headline for this landing page.",
+        "family": "default",
+        "score": 0.0,
+        "predicted_trigger": false,
+        "expected_trigger": false,
+        "passed": true,
+        "score_detail": {
+          "mode": "semantic-intent",
+          "desired_positive_concepts": [
+            "build_skill",
+            "transform_workflow",
+            "reuse_package",
+            "eval_optimize",
+            "iterate_existing_skill",
+            "team_operationalize"
+          ],
+          "matched_desired_concepts": [],
+          "extra_positive_concepts": [],
+          "matched_negative_concepts": [
+            "document_only"
+          ],
+          "exclusive_negative_concepts": [],
+          "semantic_coverage": 0.0,
+          "support_score": 0,
+          "lexical_support": 0.25,
+          "negative_penalty": 0.18,
+          "coverage_boost": 0.0,
+          "concept_evidence": {
+            "positive": {},
+            "negative": {
+              "document_only": [
+                "headline",
+                "landing page"
+              ]
+            }
+          }
+        }
+      },
+      {
+        "prompt": "Summarize this random note.",
+        "family": "default",
+        "score": 0.0,
+        "predicted_trigger": false,
+        "expected_trigger": false,
+        "passed": true,
+        "score_detail": {
+          "mode": "semantic-intent",
+          "desired_positive_concepts": [
+            "build_skill",
+            "transform_workflow",
+            "reuse_package",
+            "eval_optimize",
+            "iterate_existing_skill",
+            "team_operationalize"
+          ],
+          "matched_desired_concepts": [],
+          "extra_positive_concepts": [],
+          "matched_negative_concepts": [
+            "summarize_only"
+          ],
+          "exclusive_negative_concepts": [
+            "summarize_only"
+          ],
+          "semantic_coverage": 0.0,
+          "support_score": 0,
+          "lexical_support": 0.0,
+          "negative_penalty": 0.3,
+          "coverage_boost": 0.0,
+          "concept_evidence": {
+            "positive": {},
+            "negative": {
+              "summarize_only": [
+                "summarize"
+              ]
+            }
+          }
+        }
+      },
+      {
+        "prompt": "Just explain what a skill is.",
+        "family": "default",
+        "score": 0.0,
+        "predicted_trigger": false,
+        "expected_trigger": false,
+        "passed": true,
+        "score_detail": {
+          "mode": "semantic-intent",
+          "desired_positive_concepts": [
+            "build_skill",
+            "transform_workflow",
+            "reuse_package",
+            "eval_optimize",
+            "iterate_existing_skill",
+            "team_operationalize"
+          ],
+          "matched_desired_concepts": [],
+          "extra_positive_concepts": [],
+          "matched_negative_concepts": [
+            "explain_only"
+          ],
+          "exclusive_negative_concepts": [
+            "explain_only"
+          ],
+          "semantic_coverage": 0.0,
+          "support_score": 0,
+          "lexical_support": 0.333,
+          "negative_penalty": 0.26,
+          "coverage_boost": 0.0,
+          "concept_evidence": {
+            "positive": {},
+            "negative": {
+              "explain_only": [
+                "explain what",
+                "just explain"
+              ]
+            }
+          }
+        }
+      },
+      {
+        "prompt": "Draft a blog title for this article.",
+        "family": "default",
+        "score": 0.0,
+        "predicted_trigger": false,
+        "expected_trigger": false,
+        "passed": true,
+        "score_detail": {
+          "mode": "semantic-intent",
+          "desired_positive_concepts": [
+            "build_skill",
+            "transform_workflow",
+            "reuse_package",
+            "eval_optimize",
+            "iterate_existing_skill",
+            "team_operationalize"
+          ],
+          "matched_desired_concepts": [],
+          "extra_positive_concepts": [],
+          "matched_negative_concepts": [
+            "document_only"
+          ],
+          "exclusive_negative_concepts": [],
+          "semantic_coverage": 0.0,
+          "support_score": 0,
+          "lexical_support": 0.286,
+          "negative_penalty": 0.18,
+          "coverage_boost": 0.0,
+          "concept_evidence": {
+            "positive": {},
+            "negative": {
+              "document_only": [
+                "article",
+                "blog title"
+              ]
+            }
+          }
+        }
+      },
+      {
+        "prompt": "Translate this README into Japanese.",
+        "family": "default",
+        "score": 0.0,
+        "predicted_trigger": false,
+        "expected_trigger": false,
+        "passed": true,
+        "score_detail": {
+          "mode": "semantic-intent",
+          "desired_positive_concepts": [
+            "build_skill",
+            "transform_workflow",
+            "reuse_package",
+            "eval_optimize",
+            "iterate_existing_skill",
+            "team_operationalize"
+          ],
+          "matched_desired_concepts": [],
+          "extra_positive_concepts": [],
+          "matched_negative_concepts": [
+            "document_only",
+            "translate_only"
+          ],
+          "exclusive_negative_concepts": [
+            "translate_only"
+          ],
+          "semantic_coverage": 0.0,
+          "support_score": 0,
+          "lexical_support": 0.25,
+          "negative_penalty": 0.53,
+          "coverage_boost": 0.0,
+          "concept_evidence": {
+            "positive": {},
+            "negative": {
+              "document_only": [
+                "readme"
+              ],
+              "translate_only": [
+                "translate",
+                "into japanese"
+              ]
+            }
+          }
+        }
+      },
+      {
+        "prompt": "Give me ideas for improving our process.",
+        "family": "default",
+        "score": 0.0,
+        "predicted_trigger": false,
+        "expected_trigger": false,
+        "passed": true,
+        "score_detail": {
+          "mode": "semantic-intent",
+          "desired_positive_concepts": [
+            "build_skill",
+            "transform_workflow",
+            "reuse_package",
+            "eval_optimize",
+            "iterate_existing_skill",
+            "team_operationalize"
+          ],
+          "matched_desired_concepts": [
+            "transform_workflow"
+          ],
+          "extra_positive_concepts": [],
+          "matched_negative_concepts": [
+            "brainstorm_only"
+          ],
+          "exclusive_negative_concepts": [
+            "brainstorm_only"
+          ],
+          "semantic_coverage": 0.182,
+          "support_score": 0,
+          "lexical_support": 0.286,
+          "negative_penalty": 0.24,
+          "coverage_boost": 0.0,
+          "concept_evidence": {
+            "positive": {
+              "transform_workflow": [
+                "process"
+              ]
+            },
+            "negative": {
+              "brainstorm_only": [
+                "ideas"
+              ]
+            }
+          }
+        }
+      },
+      {
+        "prompt": "I pasted a long process description below, but I only want a summary, not a reusable skill.",
+        "family": "default",
+        "score": 0.0,
+        "predicted_trigger": false,
+        "expected_trigger": false,
+        "passed": true,
+        "score_detail": {
+          "mode": "semantic-intent",
+          "desired_positive_concepts": [
+            "build_skill",
+            "transform_workflow",
+            "reuse_package",
+            "eval_optimize",
+            "iterate_existing_skill",
+            "team_operationalize"
+          ],
+          "matched_desired_concepts": [
+            "reuse_package",
+            "transform_workflow"
+          ],
+          "extra_positive_concepts": [],
+          "matched_negative_concepts": [
+            "no_build_directive",
+            "summarize_only"
+          ],
+          "exclusive_negative_concepts": [
+            "no_build_directive",
+            "summarize_only"
+          ],
+          "semantic_coverage": 0.364,
+          "support_score": 0,
+          "lexical_support": 0.308,
+          "negative_penalty": 0.72,
+          "coverage_boost": 0.04,
+          "concept_evidence": {
+            "positive": {
+              "reuse_package": [
+                "reusable"
+              ],
+              "transform_workflow": [
+                "process"
+              ]
+            },
+            "negative": {
+              "no_build_directive": [
+                "not a reusable skill"
+              ],
+              "summarize_only": [
+                "summary",
+                "only want a summary"
+              ]
+            }
+          }
+        }
+      },
+      {
+        "prompt": "Review this note and tell me what it means in plain English.",
+        "family": "default",
+        "score": 0.0,
+        "predicted_trigger": false,
+        "expected_trigger": false,
+        "passed": true,
+        "score_detail": {
+          "mode": "semantic-intent",
+          "desired_positive_concepts": [
+            "build_skill",
+            "transform_workflow",
+            "reuse_package",
+            "eval_optimize",
+            "iterate_existing_skill",
+            "team_operationalize"
+          ],
+          "matched_desired_concepts": [],
+          "extra_positive_concepts": [],
+          "matched_negative_concepts": [
+            "explain_only"
+          ],
+          "exclusive_negative_concepts": [
+            "explain_only"
+          ],
+          "semantic_coverage": 0.0,
+          "support_score": 0,
+          "lexical_support": 0.083,
+          "negative_penalty": 0.26,
+          "coverage_boost": 0.0,
+          "concept_evidence": {
+            "positive": {},
+            "negative": {
+              "explain_only": [
+                "tell me what it means",
+                "plain english"
+              ]
+            }
+          }
+        }
+      },
+      {
+        "prompt": "Help me brainstorm several ways to improve packaging, but do not generate any skill files.",
+        "family": "default",
+        "score": 0.0,
+        "predicted_trigger": false,
+        "expected_trigger": false,
+        "passed": true,
+        "score_detail": {
+          "mode": "semantic-intent",
+          "desired_positive_concepts": [
+            "build_skill",
+            "transform_workflow",
+            "reuse_package",
+            "eval_optimize",
+            "iterate_existing_skill",
+            "team_operationalize"
+          ],
+          "matched_desired_concepts": [
+            "reuse_package"
+          ],
+          "extra_positive_concepts": [
+            "multi_asset"
+          ],
+          "matched_negative_concepts": [
+            "brainstorm_only",
+            "no_build_directive"
+          ],
+          "exclusive_negative_concepts": [
+            "brainstorm_only",
+            "no_build_directive"
+          ],
+          "semantic_coverage": 0.182,
+          "support_score": 0.06,
+          "lexical_support": 0.2,
+          "negative_penalty": 0.66,
+          "coverage_boost": 0.0,
+          "concept_evidence": {
+            "positive": {
+              "multi_asset": [
+                "files"
+              ],
+              "reuse_package": [
+                "packaging"
+              ]
+            },
+            "negative": {
+              "brainstorm_only": [
+                "brainstorm",
+                "improve packaging"
+              ],
+              "no_build_directive": [
+                "do not generate any skill files"
+              ]
+            }
+          }
+        }
+      }
+    ],
+    "near_neighbor": [
+      {
+        "prompt": "Create a one-off prompt for this task.",
+        "family": "default",
+        "score": 0.0,
+        "predicted_trigger": false,
+        "expected_trigger": false,
+        "passed": true,
+        "score_detail": {
+          "mode": "semantic-intent",
+          "desired_positive_concepts": [
+            "build_skill",
+            "transform_workflow",
+            "reuse_package",
+            "eval_optimize",
+            "iterate_existing_skill",
+            "team_operationalize"
+          ],
+          "matched_desired_concepts": [],
+          "extra_positive_concepts": [],
+          "matched_negative_concepts": [
+            "one_off_request"
+          ],
+          "exclusive_negative_concepts": [
+            "one_off_request"
+          ],
+          "semantic_coverage": 0.0,
+          "support_score": 0,
+          "lexical_support": 0.429,
+          "negative_penalty": 0.24,
+          "coverage_boost": 0.0,
+          "concept_evidence": {
+            "positive": {},
+            "negative": {
+              "one_off_request": [
+                "one-off"
+              ]
+            }
+          }
+        }
+      },
+      {
+        "prompt": "Help me brainstorm process ideas without building a skill.",
+        "family": "default",
+        "score": 0.0,
+        "predicted_trigger": false,
+        "expected_trigger": false,
+        "passed": true,
+        "score_detail": {
+          "mode": "semantic-intent",
+          "desired_positive_concepts": [
+            "build_skill",
+            "transform_workflow",
+            "reuse_package",
+            "eval_optimize",
+            "iterate_existing_skill",
+            "team_operationalize"
+          ],
+          "matched_desired_concepts": [
+            "transform_workflow"
+          ],
+          "extra_positive_concepts": [],
+          "matched_negative_concepts": [
+            "brainstorm_only",
+            "no_build_directive"
+          ],
+          "exclusive_negative_concepts": [
+            "brainstorm_only",
+            "no_build_directive"
+          ],
+          "semantic_coverage": 0.182,
+          "support_score": 0,
+          "lexical_support": 0.333,
+          "negative_penalty": 0.66,
+          "coverage_boost": 0.0,
+          "concept_evidence": {
+            "positive": {
+              "transform_workflow": [
+                "process"
+              ]
+            },
+            "negative": {
+              "brainstorm_only": [
+                "brainstorm",
+                "ideas"
+              ],
+              "no_build_directive": [
+                "without building"
+              ]
+            }
+          }
+        }
+      },
+      {
+        "prompt": "Improve this README but do not turn it into a skill.",
+        "family": "default",
+        "score": 0.0,
+        "predicted_trigger": false,
+        "expected_trigger": false,
+        "passed": true,
+        "score_detail": {
+          "mode": "semantic-intent",
+          "desired_positive_concepts": [
+            "build_skill",
+            "transform_workflow",
+            "reuse_package",
+            "eval_optimize",
+            "iterate_existing_skill",
+            "team_operationalize"
+          ],
+          "matched_desired_concepts": [],
+          "extra_positive_concepts": [],
+          "matched_negative_concepts": [
+            "document_only",
+            "no_build_directive"
+          ],
+          "exclusive_negative_concepts": [
+            "no_build_directive"
+          ],
+          "semantic_coverage": 0.0,
+          "support_score": 0,
+          "lexical_support": 0.4,
+          "negative_penalty": 0.6,
+          "coverage_boost": 0.0,
+          "concept_evidence": {
+            "positive": {},
+            "negative": {
+              "document_only": [
+                "readme"
+              ],
+              "no_build_directive": [
+                "do not turn it into a skill"
+              ]
+            }
+          }
+        }
+      },
+      {
+        "prompt": "Make a checklist for this task, but not a reusable skill.",
+        "family": "default",
+        "score": 0.0,
+        "predicted_trigger": false,
+        "expected_trigger": false,
+        "passed": true,
+        "score_detail": {
+          "mode": "semantic-intent",
+          "desired_positive_concepts": [
+            "build_skill",
+            "transform_workflow",
+            "reuse_package",
+            "eval_optimize",
+            "iterate_existing_skill",
+            "team_operationalize"
+          ],
+          "matched_desired_concepts": [
+            "reuse_package",
+            "transform_workflow"
+          ],
+          "extra_positive_concepts": [],
+          "matched_negative_concepts": [
+            "no_build_directive"
+          ],
+          "exclusive_negative_concepts": [
+            "no_build_directive"
+          ],
+          "semantic_coverage": 0.364,
+          "support_score": 0,
+          "lexical_support": 0.4,
+          "negative_penalty": 0.42,
+          "coverage_boost": 0.04,
+          "concept_evidence": {
+            "positive": {
+              "reuse_package": [
+                "reusable"
+              ],
+              "transform_workflow": [
+                "checklist"
+              ]
+            },
+            "negative": {
+              "no_build_directive": [
+                "not a reusable skill"
+              ]
+            }
+          }
+        }
+      },
+      {
+        "prompt": "Review this process note and explain it, no packaging needed.",
+        "family": "default",
+        "score": 0.0,
+        "predicted_trigger": false,
+        "expected_trigger": false,
+        "passed": true,
+        "score_detail": {
+          "mode": "semantic-intent",
+          "desired_positive_concepts": [
+            "build_skill",
+            "transform_workflow",
+            "reuse_package",
+            "eval_optimize",
+            "iterate_existing_skill",
+            "team_operationalize"
+          ],
+          "matched_desired_concepts": [
+            "reuse_package",
+            "transform_workflow"
+          ],
+          "extra_positive_concepts": [],
+          "matched_negative_concepts": [
+            "explain_only",
+            "no_build_directive"
+          ],
+          "exclusive_negative_concepts": [
+            "explain_only",
+            "no_build_directive"
+          ],
+          "semantic_coverage": 0.364,
+          "support_score": 0,
+          "lexical_support": 0.2,
+          "negative_penalty": 0.68,
+          "coverage_boost": 0.04,
+          "concept_evidence": {
+            "positive": {
+              "reuse_package": [
+                "packaging"
+              ],
+              "transform_workflow": [
+                "process"
+              ]
+            },
+            "negative": {
+              "explain_only": [
+                "explain it"
+              ],
+              "no_build_directive": [
+                "no packaging needed"
+              ]
+            }
+          }
+        }
+      },
+      {
+        "prompt": "Help me shape an idea before we decide whether to build a skill.",
+        "family": "default",
+        "score": 0.0,
+        "predicted_trigger": false,
+        "expected_trigger": false,
+        "passed": true,
+        "score_detail": {
+          "mode": "semantic-intent",
+          "desired_positive_concepts": [
+            "build_skill",
+            "transform_workflow",
+            "reuse_package",
+            "eval_optimize",
+            "iterate_existing_skill",
+            "team_operationalize"
+          ],
+          "matched_desired_concepts": [
+            "build_skill"
+          ],
+          "extra_positive_concepts": [],
+          "matched_negative_concepts": [
+            "brainstorm_only",
+            "future_outline"
+          ],
+          "exclusive_negative_concepts": [
+            "brainstorm_only",
+            "future_outline"
+          ],
+          "semantic_coverage": 0.309,
+          "support_score": 0,
+          "lexical_support": 0.308,
+          "negative_penalty": 0.46,
+          "coverage_boost": 0.0,
+          "concept_evidence": {
+            "positive": {
+              "build_skill": [
+                "build a skill"
+              ]
+            },
+            "negative": {
+              "brainstorm_only": [
+                "shape an idea"
+              ],
+              "future_outline": [
+                "before we decide whether to build"
+              ]
+            }
+          }
+        }
+      },
+      {
+        "prompt": "Write a custom answer for this request without creating a skill package.",
+        "family": "default",
+        "score": 0.131,
+        "predicted_trigger": false,
+        "expected_trigger": false,
+        "passed": true,
+        "score_detail": {
+          "mode": "semantic-intent",
+          "desired_positive_concepts": [
+            "build_skill",
+            "transform_workflow",
+            "reuse_package",
+            "eval_optimize",
+            "iterate_existing_skill",
+            "team_operationalize"
+          ],
+          "matched_desired_concepts": [
+            "build_skill",
+            "reuse_package"
+          ],
+          "extra_positive_concepts": [],
+          "matched_negative_concepts": [
+            "one_off_request"
+          ],
+          "exclusive_negative_concepts": [
+            "one_off_request"
+          ],
+          "semantic_coverage": 0.491,
+          "support_score": 0,
+          "lexical_support": 0.364,
+          "negative_penalty": 0.24,
+          "coverage_boost": 0.04,
+          "concept_evidence": {
+            "positive": {
+              "build_skill": [
+                "skill package"
+              ],
+              "reuse_package": [
+                "package"
+              ]
+            },
+            "negative": {
+              "one_off_request": [
+                "custom answer",
+                "for this request"
+              ]
+            }
+          }
+        }
+      },
+      {
+        "prompt": "Turn this into a checklist and template, but stop short of making a full skill.",
+        "family": "default",
+        "score": 0.0,
+        "predicted_trigger": false,
+        "expected_trigger": false,
+        "passed": true,
+        "score_detail": {
+          "mode": "semantic-intent",
+          "desired_positive_concepts": [
+            "build_skill",
+            "transform_workflow",
+            "reuse_package",
+            "eval_optimize",
+            "iterate_existing_skill",
+            "team_operationalize"
+          ],
+          "matched_desired_concepts": [
+            "transform_workflow"
+          ],
+          "extra_positive_concepts": [],
+          "matched_negative_concepts": [
+            "no_build_directive"
+          ],
+          "exclusive_negative_concepts": [
+            "no_build_directive"
+          ],
+          "semantic_coverage": 0.182,
+          "support_score": 0,
+          "lexical_support": 0.286,
+          "negative_penalty": 0.42,
+          "coverage_boost": 0.0,
+          "concept_evidence": {
+            "positive": {
+              "transform_workflow": [
+                "checklist"
+              ]
+            },
+            "negative": {
+              "no_build_directive": [
+                "stop short of making a full skill"
+              ]
+            }
+          }
+        }
+      },
+      {
+        "prompt": "Package this explanation as a document, not as an agent skill.",
+        "family": "default",
+        "score": 0.0,
+        "predicted_trigger": false,
+        "expected_trigger": false,
+        "passed": true,
+        "score_detail": {
+          "mode": "semantic-intent",
+          "desired_positive_concepts": [
+            "build_skill",
+            "transform_workflow",
+            "reuse_package",
+            "eval_optimize",
+            "iterate_existing_skill",
+            "team_operationalize"
+          ],
+          "matched_desired_concepts": [
+            "build_skill",
+            "reuse_package"
+          ],
+          "extra_positive_concepts": [],
+          "matched_negative_concepts": [
+            "document_only",
+            "no_build_directive"
+          ],
+          "exclusive_negative_concepts": [
+            "no_build_directive"
+          ],
+          "semantic_coverage": 0.491,
+          "support_score": 0,
+          "lexical_support": 0.4,
+          "negative_penalty": 0.6,
+          "coverage_boost": 0.04,
+          "concept_evidence": {
+            "positive": {
+              "build_skill": [
+                "agent skill"
+              ],
+              "reuse_package": [
+                "package"
+              ]
+            },
+            "negative": {
+              "document_only": [
+                "document"
+              ],
+              "no_build_directive": [
+                "not as an agent skill"
+              ]
+            }
+          }
+        }
+      },
+      {
+        "prompt": "Create an outline for a possible future skill, but do not build the skill yet.",
+        "family": "default",
+        "score": 0.0,
+        "predicted_trigger": false,
+        "expected_trigger": false,
+        "passed": true,
+        "score_detail": {
+          "mode": "semantic-intent",
+          "desired_positive_concepts": [
+            "build_skill",
+            "transform_workflow",
+            "reuse_package",
+            "eval_optimize",
+            "iterate_existing_skill",
+            "team_operationalize"
+          ],
+          "matched_desired_concepts": [],
+          "extra_positive_concepts": [],
+          "matched_negative_concepts": [
+            "future_outline",
+            "no_build_directive"
+          ],
+          "exclusive_negative_concepts": [
+            "future_outline",
+            "no_build_directive"
+          ],
+          "semantic_coverage": 0.0,
+          "support_score": 0,
+          "lexical_support": 0.357,
+          "negative_penalty": 0.64,
+          "coverage_boost": 0.0,
+          "concept_evidence": {
+            "positive": {},
+            "negative": {
+              "future_outline": [
+                "future skill",
+                "possible future skill",
+                "outline for a possible future skill"
+              ],
+              "no_build_directive": [
+                "do not build"
+              ]
+            }
+          }
+        }
+      }
+    ]
+  },
   "comparison": {
     "baseline_false_positives": 0,
-    "baseline_false_negatives": 8,
+    "baseline_false_negatives": 2,
     "improved_false_positives": 0,
     "improved_false_negatives": 0,
     "false_positive_delta": 0,
-    "false_negative_delta": -8,
-    "baseline_precision": null,
+    "false_negative_delta": -2,
+    "baseline_precision": 1.0,
     "improved_precision": 1.0,
-    "baseline_recall": 0.0,
+    "baseline_recall": 0.818,
     "improved_recall": 1.0
   }
 }

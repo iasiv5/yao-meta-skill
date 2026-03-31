@@ -1,0 +1,194 @@
+{
+  "fallback_positive_concepts": [
+    "build_skill",
+    "transform_workflow",
+    "reuse_package",
+    "eval_optimize",
+    "iterate_existing_skill"
+  ],
+  "positive_concepts": {
+    "build_skill": {
+      "weight": 0.34,
+      "phrases": [
+        "create a skill",
+        "build a skill",
+        "make a skill",
+        "generate a skill",
+        "agent skill",
+        "skill package",
+        "meta skill",
+        "meta-skill",
+        "turn this into a skill",
+        "turn all of that into one reusable skill package"
+      ]
+    },
+    "transform_workflow": {
+      "weight": 0.2,
+      "phrases": [
+        "workflow",
+        "runbook",
+        "process",
+        "checklist",
+        "prompt history",
+        "operations checklist",
+        "internal process note",
+        "existing skill draft",
+        "rough notes"
+      ]
+    },
+    "reuse_package": {
+      "weight": 0.2,
+      "phrases": [
+        "reusable",
+        "reuse",
+        "package",
+        "packaging",
+        "distribution",
+        "share it with the team",
+        "team reuse",
+        "internal workflows",
+        "production-ready"
+      ]
+    },
+    "eval_optimize": {
+      "weight": 0.16,
+      "phrases": [
+        "evals",
+        "trigger evals",
+        "near-neighbor",
+        "trigger boundary",
+        "benchmark",
+        "validation",
+        "validate",
+        "packaging checks"
+      ]
+    },
+    "iterate_existing_skill": {
+      "weight": 0.16,
+      "phrases": [
+        "improve an existing skill",
+        "existing skill",
+        "this skill",
+        "skill description",
+        "optimize skill triggering",
+        "package this skill",
+        "sharing it with the team",
+        "before sharing it with the team"
+      ]
+    },
+    "multi_asset": {
+      "weight": 0.06,
+      "phrases": [
+        "references",
+        "scripts",
+        "manifest",
+        "folder",
+        "directory",
+        "files"
+      ]
+    },
+    "team_operationalize": {
+      "weight": 0.04,
+      "phrases": [
+        "team",
+        "internal",
+        "standardize",
+        "shared",
+        "distribution",
+        "sharing it with the team",
+        "team reuse"
+      ]
+    }
+  },
+  "negative_concepts": {
+    "explain_only": {
+      "weight": 0.26,
+      "exclusive": true,
+      "phrases": [
+        "explain what",
+        "just explain",
+        "explain it",
+        "tell me what it means",
+        "plain english"
+      ]
+    },
+    "summarize_only": {
+      "weight": 0.3,
+      "exclusive": true,
+      "phrases": [
+        "summary",
+        "summarize",
+        "only want a summary",
+        "recap"
+      ]
+    },
+    "translate_only": {
+      "weight": 0.35,
+      "exclusive": true,
+      "phrases": [
+        "translate",
+        "into japanese",
+        "into french",
+        "into russian"
+      ]
+    },
+    "brainstorm_only": {
+      "weight": 0.24,
+      "exclusive": true,
+      "phrases": [
+        "brainstorm",
+        "ideas",
+        "improve packaging",
+        "shape an idea"
+      ]
+    },
+    "one_off_request": {
+      "weight": 0.24,
+      "exclusive": true,
+      "phrases": [
+        "one-off",
+        "custom answer",
+        "for this request",
+        "just this task"
+      ]
+    },
+    "no_build_directive": {
+      "weight": 0.42,
+      "exclusive": true,
+      "phrases": [
+        "do not build",
+        "don't build",
+        "without building",
+        "do not generate any skill files",
+        "not a reusable skill",
+        "not as an agent skill",
+        "do not turn it into a skill",
+        "stop short of making a full skill",
+        "not a skill yet",
+        "no packaging needed"
+      ]
+    },
+    "document_only": {
+      "weight": 0.18,
+      "exclusive": false,
+      "phrases": [
+        "readme",
+        "document",
+        "article",
+        "blog title",
+        "headline",
+        "landing page"
+      ]
+    },
+    "future_outline": {
+      "weight": 0.22,
+      "exclusive": true,
+      "phrases": [
+        "future skill",
+        "possible future skill",
+        "before we decide whether to build",
+        "outline for a possible future skill"
+      ]
+    }
+  }
+}

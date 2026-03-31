@@ -14,6 +14,13 @@ Each example contains:
 - `design-summary.md`: how the meta-skill scopes and structures the result
 - `generated-skill/`: the resulting skill package shape
 
+The complex example is intentionally thicker than the others and includes:
+
+- `manifest.json`
+- `input/` and `outputs/` sample artifacts
+- `evals/trigger_cases.json`
+- richer references and a deterministic script
+
 Additional evolution example:
 
 - `evolution-frontend-review/`: shows raw workflow, v0, v1, final, and eval delta

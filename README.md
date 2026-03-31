@@ -47,7 +47,7 @@ make test
 ## Results
 
 - `make test` passes locally
-- trigger eval: `0` false positives, `0` false negatives on the current regression set
+- semantic trigger eval: `0` false positives, `0` false negatives on the current regression set
 - eval suite: train / dev / holdout all pass
 - packaging validation: `openai`, `claude`, and `generic` targets pass contract checks
 - packaging failure fixtures: invalid metadata, invalid YAML, and unsupported targets fail as expected
@@ -110,7 +110,7 @@ Long-form material that should not bloat the main skill file. This includes desi
 
 Utility scripts that make the meta-skill operational:
 
-- `trigger_eval.py`: evaluates trigger descriptions with positive, negative, and near-neighbor prompts
+- `trigger_eval.py`: evaluates trigger descriptions with semantic intent concepts, explicit exclusions, and near-neighbor prompts
 - `run_eval_suite.py`: runs train/dev/holdout trigger suites and fails if aggregate regressions appear
 - `context_sizer.py`: estimates context weight and warns when the initial load gets too large
 - `cross_packager.py`: builds client-specific export artifacts with explicit platform contracts and validation
@@ -122,7 +122,7 @@ Reusable trigger and packaging checks, including baseline and improved descripti
 
 ### `examples/`
 
-Three end-to-end examples showing raw workflow input, design summary, and final generated skill shape.
+End-to-end examples showing raw workflow input, design summary, and final generated skill shape, including one thicker complex benchmark and one evolution chain.
 
 ### `.github/workflows/test.yml`
 
@@ -130,11 +130,12 @@ Continuous integration entrypoint that runs the full local regression suite on p
 
 ## Validation Notes
 
-- Trigger evaluation is stronger than the original overlap-only version, but it is still heuristic.
+- Trigger evaluation now uses a local semantic-intent model with explicit positive concepts, exclusion concepts, and boundary-case reporting.
 - The sample trigger report now covers a larger positive, negative, and near-neighbor set rather than a tiny demo set.
 - Train/dev/holdout trigger suites now separate iterative tuning from final verification.
 - Packaging validation now uses explicit contracts and YAML parsing, but it is still a lightweight local validation layer rather than a full platform integration suite.
 - `evals/failure-cases.md` captures known weak spots that should remain part of regression checks.
+- `failures/` captures reusable anti-pattern writeups for routing, packaging, and authoring failures.
 - `tests/verify_packager_failures.py` checks that invalid metadata, invalid YAML, and unsupported targets fail clearly.
 
 ### `templates/`
@@ -205,6 +206,7 @@ This project is best for:
 
 - Examples: [examples/README.md](examples/README.md)
 - Evals: [evals/README.md](evals/README.md)
+- Failure library: [failures/README.md](failures/README.md)
 - Packaging contracts: [references/packaging-contracts.md](references/packaging-contracts.md)
 - Platform capability matrix: [references/platform-capability-matrix.md](references/platform-capability-matrix.md)
 - Failure fixtures: [tests/fixtures](tests/fixtures)
