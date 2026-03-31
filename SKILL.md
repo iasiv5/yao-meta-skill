@@ -73,6 +73,8 @@ Use these when they materially improve quality:
 - `scripts/trigger_eval.py`
 - `scripts/context_sizer.py`
 - `scripts/cross_packager.py`
+- `scripts/governance_check.py`
+- `scripts/resource_boundary_check.py`
 
 ## Workflow
 
@@ -134,6 +136,8 @@ Use the minimum useful QA:
 - advanced: trigger evals, benchmark comparisons, revision loop
 
 For production or library-grade skills, run `scripts/context_sizer.py` before finalizing.
+Run `scripts/resource_boundary_check.py` when package sprawl or misplaced detail is a risk.
+Run `scripts/governance_check.py` when the skill is intended to be a maintained shared asset.
 
 ### 6. Package for reuse
 
@@ -175,3 +179,5 @@ Unless the user asks otherwise, produce:
 - [Meta-Skill Rubric](references/design-rubric.md)
 - [Skill Template](references/skill-template.md)
 - [Trigger And Eval Playbook](references/eval-playbook.md)
+- [Governance Model](references/governance.md)
+- [Resource Boundary Spec](references/resource-boundaries.md)

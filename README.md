@@ -19,7 +19,7 @@ It turns rough workflows, transcripts, prompts, notes, and runbooks into reusabl
 
 1. Describe the workflow, prompt set, or repeated task you want to turn into a skill.
 2. Use `yao-meta-skill` to generate or improve the package in scaffold, production, or library mode.
-3. Run `context_sizer.py`, `trigger_eval.py`, and `cross_packager.py` as needed to validate and export the result.
+3. Run `context_sizer.py`, `resource_boundary_check.py`, `governance_check.py`, `trigger_eval.py`, and `cross_packager.py` as needed to validate and export the result.
 
 ## 5-Minute Workflow
 
@@ -34,6 +34,8 @@ Minimum commands:
 ```bash
 python3 scripts/trigger_eval.py --description-file evals/improved_description.txt --cases evals/trigger_cases.json
 python3 scripts/context_sizer.py .
+python3 scripts/resource_boundary_check.py .
+python3 scripts/governance_check.py . --require-manifest
 python3 scripts/cross_packager.py . --platform openai --platform claude --platform generic --expectations evals/packaging_expectations.json --zip
 python3 tests/verify_packager_failures.py
 ```
@@ -89,6 +91,7 @@ Full reports: [reports/eval_suite.json](reports/eval_suite.json) and [reports/fa
 - packaging validation: `openai`, `claude`, and `generic` targets pass contract checks
 - packaging failure fixtures: invalid metadata, invalid YAML, and unsupported targets fail as expected
 - failure library regressions: anti-pattern families pass automated checks
+- governance and resource-boundary checks are part of the default test path
 
 ## What It Does
 
@@ -151,6 +154,8 @@ Utility scripts that make the meta-skill operational:
 - `trigger_eval.py`: evaluates trigger descriptions with semantic intent concepts, explicit exclusions, and near-neighbor prompts
 - `run_eval_suite.py`: runs train/dev/holdout trigger suites, reports family-level regressions, and fails if aggregate regressions appear
 - `context_sizer.py`: estimates context weight and warns when the initial load gets too large
+- `resource_boundary_check.py`: audits whether detail is split across `SKILL.md`, `references/`, `scripts/`, `assets/`, and `evals/` appropriately
+- `governance_check.py`: validates owner, review cadence, lifecycle stage, and maturity metadata
 - `cross_packager.py`: builds client-specific export artifacts with explicit platform contracts and validation
 - `init_skill.py`, `lint_skill.py`, `validate_skill.py`, `diff_eval.py`: minimal authoring toolchain
 
@@ -175,6 +180,7 @@ Continuous integration entrypoint that runs the full local regression suite on p
 - `evals/failure-cases.md` captures known weak spots that should remain part of regression checks.
 - `failures/` captures reusable anti-pattern writeups and machine-runnable failure cases for routing, packaging, and authoring failures.
 - `tests/verify_packager_failures.py` checks that invalid metadata, invalid YAML, and unsupported targets fail clearly.
+- Governance metadata and resource-boundary rules now have runnable checks instead of staying as prose only.
 
 ### `templates/`
 
@@ -210,6 +216,8 @@ Examples:
 ```bash
 python3 scripts/cross_packager.py ./yao-meta-skill --platform openai --platform claude --expectations evals/packaging_expectations.json --zip
 python3 scripts/context_sizer.py ./yao-meta-skill
+python3 scripts/resource_boundary_check.py ./yao-meta-skill
+python3 scripts/governance_check.py ./yao-meta-skill --require-manifest
 python3 scripts/trigger_eval.py --description-file evals/improved_description.txt --cases evals/trigger_cases.json --baseline-description-file evals/baseline_description.txt
 ```
 
@@ -218,6 +226,7 @@ python3 scripts/trigger_eval.py --description-file evals/improved_description.tx
 - **Neutral by default**: source files stay vendor-neutral, while adapters are generated only when needed.
 - **Context efficient**: the project explicitly pushes detail out of the main skill file.
 - **Evaluation-aware**: trigger and sizing checks are built into the workflow.
+- **Governed**: important skills can be checked for lifecycle metadata, ownership, and review cadence.
 - **Reusable**: the output is a package, not just a paragraph of prompt text.
 - **Portable**: compatibility is handled through packaging rather than duplicating source files for every client.
 
@@ -247,10 +256,13 @@ This project is best for:
 - Failure library: [failures/README.md](failures/README.md)
 - Failure regression check: [verify_failure_regressions.py](tests/verify_failure_regressions.py)
 - Packaging contracts: [references/packaging-contracts.md](references/packaging-contracts.md)
+- Governance model: [references/governance.md](references/governance.md)
+- Resource boundary spec: [references/resource-boundaries.md](references/resource-boundaries.md)
 - Platform capability matrix: [references/platform-capability-matrix.md](references/platform-capability-matrix.md)
 - Failure fixtures: [tests/fixtures](tests/fixtures)
 - Adapter snapshots: [tests/snapshots](tests/snapshots)
 - Evolution example: [examples/evolution-frontend-review/README.md](examples/evolution-frontend-review/README.md)
+- World-class roadmap: [WORLD_CLASS_PLAN.md](WORLD_CLASS_PLAN.md)
 
 ## License
 

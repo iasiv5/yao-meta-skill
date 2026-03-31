@@ -1,6 +1,6 @@
 PYTHON ?= python3
 
-.PHONY: eval eval-suite results-panel failure-regression-check package-check package-failure-check snapshot-check validate lint test clean
+.PHONY: eval eval-suite results-panel failure-regression-check package-check package-failure-check snapshot-check validate lint governance-check resource-boundary-check quality-check test clean
 
 eval:
 	$(PYTHON) scripts/trigger_eval.py --description-file evals/improved_description.txt --cases evals/trigger_cases.json --baseline-description-file evals/baseline_description.txt
@@ -29,7 +29,16 @@ validate:
 lint:
 	$(PYTHON) scripts/lint_skill.py .
 
-test: eval eval-suite failure-regression-check package-check package-failure-check snapshot-check validate lint
+governance-check:
+	$(PYTHON) scripts/governance_check.py . --require-manifest
+
+resource-boundary-check:
+	$(PYTHON) scripts/resource_boundary_check.py .
+
+quality-check:
+	$(PYTHON) tests/verify_quality_checks.py
+
+test: eval eval-suite failure-regression-check package-check package-failure-check snapshot-check validate lint governance-check resource-boundary-check quality-check
 
 clean:
 	rm -rf dist tests/tmp tests/tmp_snapshot

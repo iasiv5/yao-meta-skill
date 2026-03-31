@@ -12,8 +12,10 @@ def main() -> None:
 
     root = Path(args.skill_dir).resolve()
     failures = []
+    warnings = []
     skill_md = root / "SKILL.md"
     interface = root / "agents" / "interface.yaml"
+    manifest = root / "manifest.json"
 
     if not skill_md.exists():
         failures.append("Missing SKILL.md")
@@ -38,7 +40,19 @@ def main() -> None:
             if not meta.get(field):
                 failures.append(f"Missing interface field: {field}")
 
-    print(json.dumps({"ok": not failures, "failures": failures}, ensure_ascii=False, indent=2))
+    if manifest.exists():
+        data = json.loads(manifest.read_text(encoding="utf-8"))
+        for field in ("name", "version", "owner", "updated_at"):
+            if not data.get(field):
+                failures.append(f"Missing manifest field: {field}")
+        if not data.get("review_cadence"):
+            warnings.append("Manifest exists without review_cadence.")
+        if not data.get("status"):
+            warnings.append("Manifest exists without status.")
+        if not data.get("maturity_tier"):
+            warnings.append("Manifest exists without maturity_tier.")
+
+    print(json.dumps({"ok": not failures, "failures": failures, "warnings": warnings}, ensure_ascii=False, indent=2))
     if failures:
         raise SystemExit(2)
 
