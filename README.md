@@ -33,6 +33,7 @@ Minimum commands:
 
 ```bash
 python3 scripts/trigger_eval.py --description-file evals/improved_description.txt --cases evals/trigger_cases.json
+python3 scripts/run_description_optimization_suite.py
 python3 scripts/context_sizer.py .
 python3 scripts/resource_boundary_check.py .
 python3 scripts/governance_check.py . --require-manifest
@@ -89,12 +90,13 @@ Full reports: [reports/eval_suite.json](reports/eval_suite.json) and [reports/fa
 <!-- END:EVAL_RESULTS -->
 
 - packaging validation: `openai`, `claude`, and `generic` targets pass contract checks
+- description optimization suite: root description remains the best current route, team frontend review was compressed to `50` tokens with no holdout regression, and governed incident command was compressed to `37` tokens while reducing holdout false negatives from `2` to `1`
 - packaging failure fixtures: invalid metadata, invalid YAML, and unsupported targets fail as expected
 - failure library regressions: anti-pattern families pass automated checks
 - governance and resource-boundary checks are part of the default test path
 - root governance maturity score: `90/100`; governed benchmark example: `95/100`
-- context budgets: root `988/1000`, complex benchmark `790/1000`, governed benchmark `817/1000`
-- quality density: root `131.6`, complex benchmark `145.6`, governed benchmark `159.1`
+- context budgets: root `989/1000`, complex benchmark `790/1000`, governed benchmark `760/1000`
+- quality density: root `131.4`, complex benchmark `164.6`, governed benchmark `171.1`
 - regression milestones are tracked in [reports/regression_history.md](reports/regression_history.md)
 - context budget summaries are tracked in [reports/context_budget.md](reports/context_budget.md)
 
@@ -158,6 +160,8 @@ Utility scripts that make the meta-skill operational:
 
 - `trigger_eval.py`: evaluates trigger descriptions with semantic intent concepts, explicit exclusions, and near-neighbor prompts
 - `run_eval_suite.py`: runs train/dev/holdout trigger suites, reports family-level regressions, and fails if aggregate regressions appear
+- `optimize_description.py`: generates candidate descriptions, scores them on dev and holdout suites, and explains the winning route wording
+- `run_description_optimization_suite.py`: runs description optimization across the root skill and governed examples, then writes reusable reports
 - `context_sizer.py`: estimates context weight and warns when the initial load gets too large
 - `resource_boundary_check.py`: audits whether detail is split across `SKILL.md`, `references/`, `scripts/`, `assets/`, and `evals/` appropriately
 - `governance_check.py`: validates owner, review cadence, lifecycle stage, and maturity metadata
@@ -168,11 +172,11 @@ Utility scripts that make the meta-skill operational:
 
 ### `evals/`
 
-Reusable trigger and packaging checks, including baseline and improved descriptions for comparison.
+Reusable trigger and packaging checks, including baseline and improved descriptions for comparison plus the root semantic configuration that drives description optimization.
 
 ### `examples/`
 
-End-to-end examples showing raw workflow input, design summary, and final generated skill shape, including one thicker complex benchmark, one governed benchmark, and one evolution chain.
+End-to-end examples showing raw workflow input, design summary, final generated skill shape, and targeted description-optimization packs where route wording is tuned against example-specific dev and holdout cases.
 
 ### `.github/workflows/test.yml`
 

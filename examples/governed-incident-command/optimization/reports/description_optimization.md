@@ -1,0 +1,32 @@
+# Governed Incident Description Optimization
+
+Winner: `Current`
+
+- current tokens: `37`
+- winner tokens: `37`
+- baseline tokens: `93`
+
+## Winner
+
+Build governed incident command packets. Use when asked to standardize incident review, run severity assessment, or assemble incident communication.
+
+## Candidate Ranking
+
+| Candidate | Tokens | Dev FP | Dev FN | Dev Near | Holdout FP | Holdout FN |
+| --- | ---: | ---: | ---: | ---: | ---: | ---: |
+| `Current` | 37 | 0 | 1 | 1.0 | 0 | 1 |
+| `Guardrail` | 51 | 0 | 1 | 1.0 | 1 | 1 |
+| `Balanced` | 54 | 0 | 1 | 1.0 | 0 | 2 |
+| `Boundary` | 78 | 0 | 1 | 1.0 | 0 | 1 |
+| `Artifact Aware` | 78 | 0 | 1 | 1.0 | 0 | 1 |
+
+## Selection Logic
+
+Ordered by:
+- fewest false positives
+- fewest false negatives
+- highest near-neighbor pass rate
+- highest negative pass rate
+- highest precision
+- highest recall
+- shortest description

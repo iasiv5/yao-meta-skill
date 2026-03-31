@@ -1,4 +1,34 @@
 {
+  "optimizer_hints": {
+    "capability": "Create, refactor, evaluate, and package agent skills",
+    "inputs": [
+      "workflows",
+      "prompts",
+      "transcripts",
+      "docs",
+      "notes"
+    ],
+    "trigger_actions": [
+      "create a skill",
+      "turn a repeated process into a reusable skill",
+      "improve an existing skill",
+      "add evals",
+      "package a skill for team reuse"
+    ],
+    "exclusions": [
+      "summary-only requests",
+      "translation-only requests",
+      "plain documentation tasks",
+      "brainstorming without building a skill"
+    ],
+    "artifacts": [
+      "workflows",
+      "prompts",
+      "transcripts",
+      "docs",
+      "rough notes"
+    ]
+  },
   "fallback_positive_concepts": [
     "build_skill",
     "transform_workflow",

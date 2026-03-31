@@ -29,6 +29,7 @@ Recommended checks:
 - `validate_skill.py`
 - `resource_boundary_check.py`
 - a small trigger prompt set
+- one description optimization pass when route wording is still unstable
 - one realistic output example
 
 ## Advanced
@@ -41,6 +42,7 @@ Use when:
 
 Recommended checks:
 
+- description optimization suite with dev and holdout cases
 - family-based trigger regression
 - failure and anti-pattern regression
 - governance scoring

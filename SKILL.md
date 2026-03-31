@@ -38,9 +38,9 @@ Detailed mode rules: [Operating Modes](references/operating-modes.md), [QA Ladde
 
 1. Capture the recurring job, outputs, trigger phrases, and risk.
 2. Set one coherent boundary: one capability family, one trigger surface, one workflow.
-3. Write the `description` early and add positives, negatives, and near neighbors for important skills.
+3. Write the `description` early and test it before expanding the body on important skills.
 4. Generate only the folders that earn their keep. Start from the basic template unless complexity is real.
-5. Run the smallest useful gates: `context_sizer.py`, `resource_boundary_check.py`, `governance_check.py`, `trigger_eval.py`, `cross_packager.py`.
+5. Run the useful gates: `context_sizer.py`, `resource_boundary_check.py`, `governance_check.py`, `trigger_eval.py`, `optimize_description.py`, `cross_packager.py`.
 
 Detailed playbooks: [Operating Modes](references/operating-modes.md) and [Trigger And Eval Playbook](references/eval-playbook.md).
 

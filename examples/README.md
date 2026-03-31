@@ -15,6 +15,10 @@ Each example contains:
 - `design-summary.md`: how the meta-skill scopes and structures the result
 - `generated-skill/`: the resulting skill package shape
 
+Some examples also include:
+
+- `optimization/`: example-specific baseline descriptions, semantic configs, dev/holdout suites, and route-optimization reports
+
 The complex example is intentionally thicker than the others and includes:
 
 - `manifest.json`

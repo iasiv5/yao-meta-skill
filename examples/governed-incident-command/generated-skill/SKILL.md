@@ -1,6 +1,6 @@
 ---
 name: incident-command-governor
-description: Build governed incident command packets from alerts, incident notes, transcripts, and stakeholder requirements. Use when asked to standardize incident review, severity assessment, incident communication, or incident packet assembly into one reusable operational skill. Do not use for generic debugging, one-off incident explanations, or brainstorming possible response ideas.
+description: Build governed incident command packets. Use when asked to standardize incident review, run severity assessment, or assemble incident communication.
 ---
 
 # Incident Command Governor

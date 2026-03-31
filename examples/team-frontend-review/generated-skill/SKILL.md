@@ -1,6 +1,6 @@
 ---
 name: frontend-review
-description: Review frontend code for accessibility, risky UI security issues, missing states, and common UX regressions. Use when asked to review React, UI, frontend components, forms, a11y, or pre-merge frontend quality.
+description: Review frontend code for accessibility, UI security, missing states, and UX regressions. Use when asked to review React components, run a pre-merge frontend review, or check a11y and unsafe rendering.
 ---
 
 # Frontend Review
