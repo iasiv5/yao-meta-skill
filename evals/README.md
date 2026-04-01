@@ -13,7 +13,6 @@ Contents:
 - `promotion_policy.md`: formal rules for when a route is promotable
 - `baseline_description.txt`: intentionally weaker trigger description
 - `improved_description.txt`: current stronger trigger description
-- `sample_trigger_report.json`: example comparison output using the current recommended threshold
 - `../reports/description_optimization*.{json,md}`: generated route-optimization reports for the root skill
 - `failure-cases.md`: current weak spots and regression targets
 - `packaging_expectations.json`: required packaging behaviors for supported targets

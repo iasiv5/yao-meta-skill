@@ -341,7 +341,6 @@ This project is best for:
 - Evolution example: [examples/evolution-frontend-review/README.md](examples/evolution-frontend-review/README.md)
 - Governed example: [examples/governed-incident-command/design-summary.md](examples/governed-incident-command/design-summary.md)
 - Governed example score: [examples/governed-incident-command/generated-skill/reports/governance_score.json](examples/governed-incident-command/generated-skill/reports/governance_score.json)
-- World-class roadmap: [WORLD_CLASS_PLAN.md](WORLD_CLASS_PLAN.md)
 
 ## License
 
