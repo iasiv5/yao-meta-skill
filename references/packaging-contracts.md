@@ -15,6 +15,9 @@ Each target contract defines:
 - required output fields
 - required output files
 - field mapping from the neutral source metadata
+- portable execution metadata
+- trust-boundary metadata
+- degradation strategy metadata
 
 ## Failure Handling
 
@@ -32,3 +35,14 @@ The neutral source remains:
 - `agents/interface.yaml`
 
 Target-specific metadata is generated at packaging time.
+
+## Portability Model
+
+The packaging layer now preserves four portable semantics from the neutral source:
+
+- activation
+- execution
+- trust
+- degradation
+
+This means portability is not just "can it export a file?" but also "does the exported target preserve the source package's activation and safety assumptions?"

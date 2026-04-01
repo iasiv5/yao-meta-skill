@@ -65,6 +65,7 @@ def main() -> None:
     report_result = run("report")
     assert report_result["ok"], report_result
     assert "iteration_ledger" in report_result["payload"]["artifacts"], report_result
+    assert "portability_score" in report_result["payload"]["artifacts"], report_result
 
     package_dir = tmp_root / "dist"
     package_result = run("package", ".", "--platform", "generic", "--output-dir", str(package_dir))

@@ -111,14 +111,15 @@ Full reports: [reports/eval_suite.json](reports/eval_suite.json) and [reports/fa
 <!-- END:EVAL_RESULTS -->
 
 - packaging validation: `openai`, `claude`, and `generic` targets pass contract checks
+- portability score: `100/100` with neutral activation, execution, trust, and degradation metadata preserved across all exported targets
 - description optimization suite: root, team frontend review, and governed incident command pass blind and adversarial holdout gates; governed incident command still carries one visible holdout miss, and adversarial calibration plus family drift are now tracked separately
 - judge-backed blind eval: root, team frontend review, and governed incident command now pass an independent rubric judge on blind holdout prompts
 - packaging failure fixtures: invalid metadata, invalid YAML, and unsupported targets fail as expected
 - failure library regressions: anti-pattern families pass automated checks
 - governance and resource-boundary checks are part of the default test path
 - root governance maturity score: `90/100`; governed benchmark example: `95/100`
-- context budgets: root `886/1000`, complex benchmark `790/1000`, governed benchmark `760/1000`
-- quality density: root `146.7`, complex benchmark `164.6`, governed benchmark `171.1`
+- context budgets: root `971/1000`, complex benchmark `790/1000`, governed benchmark `760/1000`
+- quality density: root `133.9`, complex benchmark `164.6`, governed benchmark `171.1`
 - regression milestones are tracked in [reports/regression_history.md](reports/regression_history.md)
 - description drift history is tracked in [reports/description_drift_history.md](reports/description_drift_history.md)
 - route confusion is tracked in [reports/route_scorecard.md](reports/route_scorecard.md)
@@ -126,6 +127,7 @@ Full reports: [reports/eval_suite.json](reports/eval_suite.json) and [reports/fa
 - promotion decisions are published in [reports/promotion_decisions.md](reports/promotion_decisions.md)
 - candidate lifecycle states are published in [reports/candidate_registry.md](reports/candidate_registry.md)
 - context budget summaries are tracked in [reports/context_budget.md](reports/context_budget.md)
+- portability status is tracked in [reports/portability_score.md](reports/portability_score.md)
 
 ## What It Does
 
@@ -213,6 +215,7 @@ Utility scripts that make the meta-skill operational:
 - `render_context_reports.py`: generates root and example context-budget reports plus a shared context summary
 - `render_regression_history.py`: turns milestone snapshots into a readable regression history report
 - `cross_packager.py`: builds client-specific export artifacts with explicit platform contracts and validation
+- `render_portability_report.py`: scores cross-environment portability from neutral metadata, degradation rules, and consumer validation coverage
 - `init_skill.py`, `lint_skill.py`, `validate_skill.py`, `diff_eval.py`: minimal authoring toolchain
 
 ### `evals/`

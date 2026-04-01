@@ -37,13 +37,35 @@ def require_fields(payload: dict, fields: list[str], label: str) -> None:
         raise ValueError(f"Missing required {label} fields: {', '.join(missing)}")
 
 
+def require_target_degradation(
+    degradation: dict,
+    targets: list[str],
+) -> None:
+    missing = [target for target in targets if not degradation.get(target)]
+    if missing:
+        raise ValueError(f"Missing degradation entries for targets: {', '.join(missing)}")
+
+
 def build_manifest(skill_dir: Path, platform: str) -> dict:
     frontmatter = read_frontmatter(skill_dir / "SKILL.md")
     interface_doc = read_interface(skill_dir)
     interface = interface_doc.get("interface", {})
     compatibility = interface_doc.get("compatibility", {})
+    activation = compatibility.get("activation", {})
+    execution = compatibility.get("execution", {})
+    trust = compatibility.get("trust", {})
+    degradation = compatibility.get("degradation", {})
     require_fields(frontmatter, ["name", "description"], "frontmatter")
     require_fields(interface, ["display_name", "short_description", "default_prompt"], "interface")
+    require_fields(compatibility, ["canonical_format", "adapter_targets"], "compatibility")
+    require_fields(activation, ["mode"], "compatibility.activation")
+    require_fields(execution, ["context", "shell"], "compatibility.execution")
+    require_fields(
+        trust,
+        ["source_tier", "remote_inline_execution", "remote_metadata_policy"],
+        "compatibility.trust",
+    )
+    require_target_degradation(degradation, compatibility.get("adapter_targets", []))
     return {
         "name": frontmatter.get("name", skill_dir.name),
         "description": frontmatter.get("description", ""),
@@ -54,36 +76,109 @@ def build_manifest(skill_dir: Path, platform: str) -> dict:
         "short_description": interface.get("short_description", ""),
         "default_prompt": interface.get("default_prompt", ""),
         "canonical_metadata": "agents/interface.yaml",
+        "canonical_format": compatibility.get("canonical_format", "agent-skills"),
         "adapter_targets": compatibility.get("adapter_targets", []),
+        "activation_mode": activation.get("mode", "manual"),
+        "activation_paths": activation.get("paths", []),
+        "execution_context": execution.get("context", "inline"),
+        "shell": execution.get("shell", "bash"),
+        "trust_level": trust.get("source_tier", "local"),
+        "remote_inline_execution": trust.get("remote_inline_execution", "forbid"),
+        "remote_metadata_policy": trust.get("remote_metadata_policy", "allow-metadata-only"),
+        "degradation_strategy": degradation.get(platform, "neutral-source"),
+        "portability_profile": {
+            "activation_mode": activation.get("mode", "manual"),
+            "activation_paths": activation.get("paths", []),
+            "execution_context": execution.get("context", "inline"),
+            "shell": execution.get("shell", "bash"),
+            "source_tier": trust.get("source_tier", "local"),
+            "remote_inline_execution": trust.get("remote_inline_execution", "forbid"),
+            "remote_metadata_policy": trust.get("remote_metadata_policy", "allow-metadata-only"),
+            "degradation_strategy": degradation.get(platform, "neutral-source"),
+        },
     }
 
 
 PLATFORM_CONTRACTS = {
     "openai": {
-        "required_fields": ["name", "description", "version", "display_name", "short_description", "default_prompt", "canonical_metadata"],
+        "required_fields": [
+            "name",
+            "description",
+            "version",
+            "display_name",
+            "short_description",
+            "default_prompt",
+            "canonical_metadata",
+            "canonical_format",
+            "activation_mode",
+            "execution_context",
+            "shell",
+            "trust_level",
+            "remote_inline_execution",
+            "degradation_strategy",
+            "portability_profile",
+        ],
         "required_files": ["targets/openai/adapter.json", "targets/openai/agents/openai.yaml"],
         "field_mapping": {
             "display_name": "interface.display_name",
             "short_description": "interface.short_description",
             "default_prompt": "interface.default_prompt",
+            "execution_context": "compatibility.execution.context",
+            "shell": "compatibility.execution.shell",
         },
     },
     "claude": {
-        "required_fields": ["name", "description", "version", "display_name", "short_description", "default_prompt", "canonical_metadata"],
+        "required_fields": [
+            "name",
+            "description",
+            "version",
+            "display_name",
+            "short_description",
+            "default_prompt",
+            "canonical_metadata",
+            "canonical_format",
+            "activation_mode",
+            "execution_context",
+            "shell",
+            "trust_level",
+            "remote_inline_execution",
+            "degradation_strategy",
+            "portability_profile",
+        ],
         "required_files": ["targets/claude/adapter.json", "targets/claude/README.md"],
         "field_mapping": {
             "display_name": "adapter.display_name",
             "short_description": "adapter.short_description",
             "default_prompt": "adapter.default_prompt",
+            "execution_context": "compatibility.execution.context",
+            "shell": "compatibility.execution.shell",
         },
     },
     "generic": {
-        "required_fields": ["name", "description", "version", "display_name", "short_description", "default_prompt", "canonical_metadata"],
+        "required_fields": [
+            "name",
+            "description",
+            "version",
+            "display_name",
+            "short_description",
+            "default_prompt",
+            "canonical_metadata",
+            "canonical_format",
+            "activation_mode",
+            "execution_context",
+            "shell",
+            "trust_level",
+            "remote_inline_execution",
+            "degradation_strategy",
+            "portability_profile",
+        ],
         "required_files": ["targets/generic/adapter.json"],
         "field_mapping": {
             "display_name": "adapter.display_name",
             "short_description": "adapter.short_description",
             "default_prompt": "adapter.default_prompt",
+            "execution_context": "compatibility.execution.context",
+            "shell": "compatibility.execution.shell",
         },
     },
 }
@@ -91,10 +186,23 @@ PLATFORM_CONTRACTS = {
 
 def write_yaml_like(path: Path, payload: dict) -> None:
     interface = payload.get("interface", {})
+    compatibility = payload.get("compatibility", {})
     lines = ["interface:"]
     for key in ("display_name", "short_description", "default_prompt"):
         value = interface.get(key, "")
         lines.append(f'  {key}: "{value}"')
+    lines.extend(
+        [
+            "compatibility:",
+            f'  canonical_format: "{compatibility.get("canonical_format", "")}"',
+            f'  activation_mode: "{compatibility.get("activation_mode", "")}"',
+            f'  execution_context: "{compatibility.get("execution_context", "")}"',
+            f'  shell: "{compatibility.get("shell", "")}"',
+            f'  trust_level: "{compatibility.get("trust_level", "")}"',
+            f'  remote_inline_execution: "{compatibility.get("remote_inline_execution", "")}"',
+            f'  degradation_strategy: "{compatibility.get("degradation_strategy", "")}"',
+        ]
+    )
     path.write_text("\n".join(lines) + "\n", encoding="utf-8")
 
 
@@ -114,7 +222,16 @@ def write_adapter(skill_dir: Path, out_dir: Path, platform: str) -> Path:
                     "display_name": payload["display_name"],
                     "short_description": payload["short_description"],
                     "default_prompt": payload["default_prompt"],
-                }
+                },
+                "compatibility": {
+                    "canonical_format": payload["canonical_format"],
+                    "activation_mode": payload["activation_mode"],
+                    "execution_context": payload["execution_context"],
+                    "shell": payload["shell"],
+                    "trust_level": payload["trust_level"],
+                    "remote_inline_execution": payload["remote_inline_execution"],
+                    "degradation_strategy": payload["degradation_strategy"],
+                },
             },
         )
         payload["install_hint"] = f"Use the packaged skill and include targets/openai/agents/openai.yaml when the client expects OpenAI-style interface metadata."

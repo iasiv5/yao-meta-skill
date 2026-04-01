@@ -5,6 +5,11 @@ from pathlib import Path
 import yaml
 
 
+VALID_EXECUTION_CONTEXTS = {"inline", "fork"}
+VALID_SHELLS = {"bash", "powershell"}
+VALID_SOURCE_TIERS = {"local", "managed", "plugin", "remote"}
+
+
 def main() -> None:
     parser = argparse.ArgumentParser(description="Validate a skill package.")
     parser.add_argument("skill_dir")
@@ -36,9 +41,37 @@ def main() -> None:
     if interface.exists():
         data = yaml.safe_load(interface.read_text(encoding="utf-8")) or {}
         meta = data.get("interface", {})
+        compatibility = data.get("compatibility", {})
+        activation = compatibility.get("activation", {})
+        execution = compatibility.get("execution", {})
+        trust = compatibility.get("trust", {})
+        degradation = compatibility.get("degradation", {})
         for field in ("display_name", "short_description", "default_prompt"):
             if not meta.get(field):
                 failures.append(f"Missing interface field: {field}")
+        if not compatibility.get("canonical_format"):
+            failures.append("Missing compatibility field: canonical_format")
+        adapter_targets = compatibility.get("adapter_targets")
+        if not adapter_targets or not isinstance(adapter_targets, list):
+            failures.append("Missing compatibility field: adapter_targets")
+            adapter_targets = []
+        if not activation.get("mode"):
+            failures.append("Missing compatibility.activation.mode")
+        if activation.get("mode") == "path_scoped" and not activation.get("paths"):
+            failures.append("path_scoped activation requires compatibility.activation.paths")
+        if execution.get("context") not in VALID_EXECUTION_CONTEXTS:
+            failures.append("Invalid compatibility.execution.context")
+        if execution.get("shell") not in VALID_SHELLS:
+            failures.append("Invalid compatibility.execution.shell")
+        if trust.get("source_tier") not in VALID_SOURCE_TIERS:
+            failures.append("Invalid compatibility.trust.source_tier")
+        if trust.get("remote_inline_execution") not in {"forbid", "allow"}:
+            failures.append("Invalid compatibility.trust.remote_inline_execution")
+        if not trust.get("remote_metadata_policy"):
+            failures.append("Missing compatibility.trust.remote_metadata_policy")
+        for target in adapter_targets:
+            if target not in degradation:
+                failures.append(f"Missing compatibility.degradation entry for target: {target}")
 
     if manifest.exists():
         data = json.loads(manifest.read_text(encoding="utf-8"))

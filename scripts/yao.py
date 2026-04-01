@@ -193,6 +193,7 @@ def command_report(args: argparse.Namespace) -> int:
             run_script("render_iteration_ledger.py", []),
             run_script("render_regression_history.py", []),
             run_script("render_context_reports.py", []),
+            run_script("render_portability_report.py", []),
         ]
     )
     report = {
@@ -205,6 +206,7 @@ def command_report(args: argparse.Namespace) -> int:
             "iteration_ledger": "reports/iteration_ledger.md",
             "regression_history": "reports/regression_history.md",
             "context_budget": "reports/context_budget.json",
+            "portability_score": "reports/portability_score.json",
         },
     }
     print(json.dumps(report, ensure_ascii=False, indent=2))
@@ -269,6 +271,7 @@ def command_workspace_flow(args: argparse.Namespace) -> int:
             {"phase": "report-refresh", "result": run_script("render_iteration_ledger.py", [])},
             {"phase": "report-refresh", "result": run_script("render_regression_history.py", [])},
             {"phase": "report-refresh", "result": run_script("render_context_reports.py", [])},
+            {"phase": "report-refresh", "result": run_script("render_portability_report.py", [])},
         ]
     )
 

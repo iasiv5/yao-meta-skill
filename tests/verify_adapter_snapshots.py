@@ -4,6 +4,7 @@ import shutil
 import subprocess
 import sys
 from pathlib import Path
+import yaml
 
 
 ROOT = Path(__file__).resolve().parent.parent
@@ -49,8 +50,17 @@ def main() -> None:
             failures.append(f"{name}: platform mismatch")
         if adapter.get("canonical_metadata") != snapshot["canonical_metadata"]:
             failures.append(f"{name}: canonical metadata mismatch")
+        for field in snapshot.get("required_fields", []):
+            if field not in adapter:
+                failures.append(f"{name}: missing required adapter field {field}")
         if not (TMP / snapshot["required_generated_file"]).exists():
             failures.append(f"{name}: missing generated file {snapshot['required_generated_file']}")
+        if name == "openai":
+            meta = yaml.safe_load((TMP / "targets" / "openai" / "agents" / "openai.yaml").read_text(encoding="utf-8")) or {}
+            compatibility = meta.get("compatibility", {})
+            for field in ("canonical_format", "activation_mode", "execution_context", "shell", "trust_level", "remote_inline_execution", "degradation_strategy"):
+                if not compatibility.get(field):
+                    failures.append(f"{name}: missing portability metadata in generated openai.yaml: {field}")
 
     report = {"ok": not failures, "failures": failures}
     print(json.dumps(report, ensure_ascii=False, indent=2))
