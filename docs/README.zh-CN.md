@@ -14,49 +14,23 @@
 
 ## 架构图
 
-这套系统是分层设计的，方便新用户从上到下理解：先路由，再选方法，再做验证，最后再打包和治理。
+Hero 版可以压缩成一条主线：把零散输入变成一个可治理、可复用的 skill 包。
 
 ```mermaid
-flowchart TD
-    A["输入<br/>workflow / prompt / transcript / docs / notes"] --> B["路由入口<br/>SKILL.md"]
-    B --> C["方法层<br/>references/"]
-    B --> D["作者流<br/>scripts/yao.py"]
-
-    C --> C1["Skill Archetype"]
-    C --> C2["Gate Selection"]
-    C --> C3["Non-Skill Decision"]
-    C --> C4["Operating Modes"]
-    C --> C5["Governance"]
-    C --> C6["Resource Boundaries"]
-
-    D --> E["创建<br/>init / template"]
-    D --> F["校验<br/>lint / boundary / governance"]
-    D --> G["评测<br/>trigger / suites / judge / confusion"]
-    D --> H["晋升<br/>promotion policy / candidate registry"]
-    D --> I["打包<br/>neutral source -> target adapters"]
-    D --> J["报告<br/>history / scorecards / context / portability"]
-
-    E --> K["Skill Package"]
-    F --> K
-    G --> L["evals/"]
-    H --> M["reports/"]
-    I --> N["dist/ 或目标导出物"]
-
-    K --> K1["SKILL.md"]
-    K --> K2["agents/interface.yaml"]
-    K --> K3["manifest.json"]
-    K --> K4["可选 references / scripts / evals / reports"]
-
-    L --> M
+flowchart LR
+    A["输入<br/>workflow / prompt / transcript / docs / notes"] --> B["路由<br/>SKILL.md"]
+    B --> C["设计<br/>方法 + 质量门"]
+    C --> D["执行<br/>create / validate / eval / promote"]
+    D --> E["产出<br/>skill 包 + 报告 + 适配层"]
 ```
 
-可以把这张图理解成 5 层：
+10 秒理解这张图：
 
-- **输入层**：把零散的操作材料作为 skill 的原始输入。
-- **路由层**：`SKILL.md` 保持轻量，优先定义边界、模式和输出契约。
-- **方法层**：方法文档决定这件事该不该 skill 化、该上哪些质量门。
-- **作者流层**：统一 CLI 把创建、校验、优化、晋升、报告和打包串成一条路径。
-- **证据与产出层**：最终产出不只是 skill 包，还包括 eval 结果、治理信号、portability 产物和迭代历史。
+- **输入**：从零散的 workflow、prompt、文档和笔记出发。
+- **路由**：先用精简的 `SKILL.md` 定义边界和触发。
+- **设计**：选择合适的 archetype、gates 和资源拆分方式。
+- **执行**：通过统一 CLI 完成创建、校验、优化和晋升。
+- **产出**：最终得到 skill 包，以及评测、治理和 portability 证据。
 
 ## Quick Start
 

@@ -14,49 +14,23 @@ Il transforme des workflows bruts, des transcripts, des prompts, des notes et de
 
 ## Architecture
 
-Le système est volontairement organisé par couches afin qu'un nouveau venu puisse le lire de haut en bas : d'abord le routage, ensuite la méthode, puis la validation, et enfin le packaging et la gouvernance.
+En version hero, le système tient sur une seule ligne : transformer une entrée brouillonne en skill package gouverné et réutilisable.
 
 ```mermaid
-flowchart TD
-    A["Entrées<br/>workflows / prompts / transcripts / docs / notes"] --> B["Routeur<br/>SKILL.md"]
-    B --> C["Couche méthode<br/>references/"]
-    B --> D["Flux auteur<br/>scripts/yao.py"]
-
-    C --> C1["Skill Archetype"]
-    C --> C2["Gate Selection"]
-    C --> C3["Non-Skill Decision"]
-    C --> C4["Operating Modes"]
-    C --> C5["Governance"]
-    C --> C6["Resource Boundaries"]
-
-    D --> E["Création<br/>init / template"]
-    D --> F["Validation<br/>lint / boundary / governance"]
-    D --> G["Évaluation<br/>trigger / suites / judge / confusion"]
-    D --> H["Promotion<br/>promotion policy / candidate registry"]
-    D --> I["Packaging<br/>neutral source -> target adapters"]
-    D --> J["Rapports<br/>history / scorecards / context / portability"]
-
-    E --> K["Skill Package"]
-    F --> K
-    G --> L["evals/"]
-    H --> M["reports/"]
-    I --> N["dist/ ou sorties cibles"]
-
-    K --> K1["SKILL.md"]
-    K --> K2["agents/interface.yaml"]
-    K --> K3["manifest.json"]
-    K --> K4["references / scripts / evals / reports optionnels"]
-
-    L --> M
+flowchart LR
+    A["Entrées<br/>workflow / prompt / transcript / docs / notes"] --> B["Routage<br/>SKILL.md"]
+    B --> C["Conception<br/>méthode + garde-fous"]
+    C --> D["Exécution<br/>create / validate / eval / promote"]
+    D --> E["Sorties<br/>skill package + rapports + adapters"]
 ```
 
-On peut lire ce schéma en cinq couches :
+Lecture en 10 secondes :
 
-- **Couche d'entrée** : les matériaux opérationnels bruts servent de source au futur skill package.
-- **Couche de routage** : `SKILL.md` reste léger et définit d'abord les frontières, le mode et le contrat de sortie.
-- **Couche méthode** : les documents de doctrine déterminent si la demande mérite d'être skillifiée et quels garde-fous elle doit recevoir.
-- **Couche de flux auteur** : le CLI unifié relie création, validation, optimisation, promotion, reporting et packaging.
-- **Couche preuves et sorties** : le résultat n'est pas seulement un skill package, mais aussi des evals, des signaux de gouvernance, des sorties de portabilité et un historique d'itération.
+- **Entrées** : on part de workflows, prompts, documents et notes dispersés.
+- **Routage** : un `SKILL.md` léger définit d'abord la frontière et le déclenchement.
+- **Conception** : on choisit le bon archetype, les bons gates et la bonne séparation des ressources.
+- **Exécution** : la CLI unifiée construit, valide, optimise et promeut le skill.
+- **Sorties** : on obtient un skill package réutilisable avec ses preuves d'évaluation, de gouvernance et de portabilité.
 
 ## Quick Start
 

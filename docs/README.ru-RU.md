@@ -14,49 +14,23 @@
 
 ## Архитектура
 
-Система специально построена слоями, чтобы новый пользователь мог понять ее сверху вниз: сначала routing, затем method, потом validation, а уже после этого packaging и governance.
+В hero-версии вся система сводится к одной линии: превратить разрозненный вход в управляемый и переиспользуемый skill package.
 
 ```mermaid
-flowchart TD
-    A["Входы<br/>workflows / prompts / transcripts / docs / notes"] --> B["Router<br/>SKILL.md"]
-    B --> C["Method layer<br/>references/"]
-    B --> D["Authoring flow<br/>scripts/yao.py"]
-
-    C --> C1["Skill Archetype"]
-    C --> C2["Gate Selection"]
-    C --> C3["Non-Skill Decision"]
-    C --> C4["Operating Modes"]
-    C --> C5["Governance"]
-    C --> C6["Resource Boundaries"]
-
-    D --> E["Создание<br/>init / template"]
-    D --> F["Проверка<br/>lint / boundary / governance"]
-    D --> G["Оценка<br/>trigger / suites / judge / confusion"]
-    D --> H["Промоушен<br/>promotion policy / candidate registry"]
-    D --> I["Упаковка<br/>neutral source -> target adapters"]
-    D --> J["Отчеты<br/>history / scorecards / context / portability"]
-
-    E --> K["Skill Package"]
-    F --> K
-    G --> L["evals/"]
-    H --> M["reports/"]
-    I --> N["dist/ или target outputs"]
-
-    K --> K1["SKILL.md"]
-    K --> K2["agents/interface.yaml"]
-    K --> K3["manifest.json"]
-    K --> K4["optional references / scripts / evals / reports"]
-
-    L --> M
+flowchart LR
+    A["Входы<br/>workflow / prompt / transcript / docs / notes"] --> B["Маршрут<br/>SKILL.md"]
+    B --> C["Проектирование<br/>method + gates"]
+    C --> D["Исполнение<br/>create / validate / eval / promote"]
+    D --> E["Выходы<br/>skill package + reports + adapters"]
 ```
 
-Эту схему удобнее читать как 5 слоев:
+Как читать это за 10 секунд:
 
-- **Слой входов**: разрозненные операционные материалы становятся сырьем для будущего skill package.
-- **Слой routing**: `SKILL.md` остается легким и сначала определяет границы, режим и output contract.
-- **Слой method**: doctrinal docs определяют, стоит ли вообще skill-изировать запрос и какие quality gates ему нужны.
-- **Слой authoring flow**: единый CLI связывает создание, проверку, оптимизацию, promotion, reporting и packaging.
-- **Слой доказательств и выходов**: итогом становится не только skill package, но и eval-артефакты, governance signals, portability outputs и история итераций.
+- **Входы**: стартуем с workflow, prompt, документов и заметок.
+- **Маршрут**: компактный `SKILL.md` сначала задает границу и trigger.
+- **Проектирование**: выбираются нужные archetype, quality gates и разбиение ресурсов.
+- **Исполнение**: единый CLI создает, проверяет, оптимизирует и продвигает skill.
+- **Выходы**: результатом становится skill package плюс доказательства оценки, governance и portability.
 
 ## Quick Start
 
