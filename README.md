@@ -22,7 +22,10 @@ It turns rough workflows, transcripts, prompts, notes, and runbooks into reusabl
 - a front-loaded intent dialogue before deep authoring
 - a controlled benchmark scan before deep authoring
 - a generated visual HTML overview for each newly initialized skill
+- a compact HTML review viewer for first-pass human review
 - three high-value next iteration directions after the first package is created
+- a lightweight feedback log that does not require a full promotion cycle
+- a baseline compare report for with-skill vs baseline review
 - neutral source metadata plus client-specific adapters
 - governance, promotion, and portability checks built into the default flow
 
@@ -83,13 +86,13 @@ This is a scenario-oriented benchmark shared with the project. It is most useful
 Or use the unified authoring CLI:
 
 ```bash
-python3 scripts/yao.py init my-skill --description "Describe what the skill does."
-python3 scripts/yao.py intent-dialogue my-skill
+python3 scripts/yao.py quickstart --output-dir .
 python3 scripts/yao.py reference-scan my-skill \
   --external-reference "World Class Method::method::Borrow a tight evaluation loop.::Do not copy heavy process." \
   --local-constraint "Current Library Naming::structure::Keep naming aligned with the local skill library.::Do not inherit private references."
-python3 scripts/yao.py skill-report my-skill
-python3 scripts/yao.py iteration-directions my-skill
+python3 scripts/yao.py review-viewer my-skill
+python3 scripts/yao.py feedback my-skill --note "Tighten exclusions before adding scripts." --rating 4 --category boundary
+python3 scripts/yao.py baseline-compare
 python3 scripts/yao.py package . --platform generic --output-dir dist
 ```
 
@@ -126,6 +129,7 @@ Unified authoring flow:
 python3 scripts/yao.py init my-skill --description "Describe what the skill does."
 python3 scripts/yao.py validate my-skill
 python3 scripts/yao.py workspace-flow --target root --label first-pass
+python3 scripts/yao.py review-viewer my-skill
 python3 scripts/yao.py review --target root
 python3 scripts/yao.py release-snapshot --target root --label release-candidate
 python3 scripts/yao.py package . --platform openai --platform claude --platform generic --output-dir dist --zip
@@ -190,6 +194,7 @@ Full reports: [reports/eval_suite.json](reports/eval_suite.json) and [reports/fa
 - promotion evidence is summarized in [reports/iteration_ledger.md](reports/iteration_ledger.md)
 - promotion decisions are published in [reports/promotion_decisions.md](reports/promotion_decisions.md)
 - candidate lifecycle states are published in [reports/candidate_registry.md](reports/candidate_registry.md)
+- lightweight with-skill vs baseline comparison is published in [reports/baseline-compare.md](reports/baseline-compare.md)
 - context budget summaries are tracked in [reports/context_budget.md](reports/context_budget.md)
 - portability status is tracked in [reports/portability_score.md](reports/portability_score.md)
 

@@ -99,6 +99,28 @@ def resolve_promotion_target(name: str) -> str:
     return PROMOTION_TARGETS[name]
 
 
+def baseline_compare_args() -> list[str]:
+    args = []
+    for label, target in TARGETS.items():
+        args.extend(["--entry", f"{label}::{target['output_json']}"])
+    args.extend(
+        [
+            "--output-json",
+            str(ROOT / "reports" / "baseline-compare.json"),
+            "--output-md",
+            str(ROOT / "reports" / "baseline-compare.md"),
+        ]
+    )
+    return args
+
+
+def prompt_with_default(label: str, default: str) -> str:
+    sys.stderr.write(f"{label} [{default}]: ")
+    sys.stderr.flush()
+    value = sys.stdin.readline().strip()
+    return value or default
+
+
 def command_init(args: argparse.Namespace) -> int:
     result = run_script(
         "init_skill.py",
@@ -108,10 +130,57 @@ def command_init(args: argparse.Namespace) -> int:
             args.description,
             "--output-dir",
             args.output_dir,
+            "--mode",
+            args.mode,
             *(["--title", args.title] if args.title else []),
         ],
     )
     print(json.dumps(result["payload"] if result["payload"] is not None else result, ensure_ascii=False, indent=2))
+    return 0 if result["ok"] else 2
+
+
+def command_quickstart(args: argparse.Namespace) -> int:
+    name = args.name or prompt_with_default("Skill name", "my-skill")
+    job = args.job or prompt_with_default("Recurring job", "Turn a repeated workflow into a reusable skill.")
+    primary_output = args.primary_output or prompt_with_default("Primary output", "A reusable skill package.")
+    mode = args.mode or prompt_with_default("Mode (scaffold/production/library)", "scaffold")
+    mode = mode if mode in {"scaffold", "production", "library"} else "scaffold"
+    description = args.description or f"{job.rstrip('.')} Primary output: {primary_output.rstrip('.')}."
+    title = args.title or name.replace("-", " ").title()
+    result = run_script(
+        "init_skill.py",
+        [
+            name,
+            "--description",
+            description,
+            "--title",
+            title,
+            "--output-dir",
+            args.output_dir,
+            "--mode",
+            mode,
+        ],
+    )
+    payload = result["payload"] if result["payload"] is not None else result
+    report = {
+        "ok": result["ok"],
+        "root": payload.get("root"),
+        "mode": mode,
+        "artifacts": payload.get("artifacts", {}),
+        "guidance": {
+            "why_this_mode": (
+                "Scaffold mode keeps the first package light and lets you postpone governance-heavy work until reuse becomes real."
+                if mode == "scaffold"
+                else "This mode expects stronger lifecycle metadata, validation, and review discipline."
+            ),
+            "next_steps": [
+                "Open reports/intent-dialogue.md and tighten the real job, outputs, and exclusions.",
+                "Open reports/review-viewer.html to explain the package to a first-time reviewer.",
+                "Use reports/iteration-directions.md to choose only one high-value next move before adding more files.",
+            ],
+        },
+    }
+    print(json.dumps(report, ensure_ascii=False, indent=2))
     return 0 if result["ok"] else 2
 
 
@@ -191,6 +260,7 @@ def command_report(args: argparse.Namespace) -> int:
             run_script("render_eval_dashboard.py", []),
             run_script("render_description_drift_history.py", []),
             run_script("render_iteration_ledger.py", []),
+            run_script("render_baseline_compare.py", baseline_compare_args()),
             run_script("render_regression_history.py", []),
             run_script("render_context_reports.py", []),
             run_script("render_portability_report.py", []),
@@ -204,6 +274,7 @@ def command_report(args: argparse.Namespace) -> int:
             "route_scorecard": "reports/route_scorecard.json",
             "promotion_decisions": "reports/promotion_decisions.json",
             "iteration_ledger": "reports/iteration_ledger.md",
+            "baseline_compare": "reports/baseline-compare.json",
             "regression_history": "reports/regression_history.md",
             "context_budget": "reports/context_budget.json",
             "portability_score": "reports/portability_score.json",
@@ -221,6 +292,18 @@ def command_skill_report(args: argparse.Namespace) -> int:
     if args.output_json:
         cmd.extend(["--output-json", args.output_json])
     result = run_script("render_skill_overview.py", cmd)
+    print(json.dumps(result["payload"] if result["payload"] is not None else result, ensure_ascii=False, indent=2))
+    return 0 if result["ok"] else 2
+
+
+def command_review_viewer(args: argparse.Namespace) -> int:
+    skill_dir = str(Path(args.skill_dir).resolve())
+    cmd = [skill_dir]
+    if args.output_html:
+        cmd.extend(["--output-html", args.output_html])
+    if args.output_json:
+        cmd.extend(["--output-json", args.output_json])
+    result = run_script("render_review_viewer.py", cmd)
     print(json.dumps(result["payload"] if result["payload"] is not None else result, ensure_ascii=False, indent=2))
     return 0 if result["ok"] else 2
 
@@ -263,6 +346,29 @@ def command_iteration_directions(args: argparse.Namespace) -> int:
     if args.output_json:
         cmd.extend(["--output-json", args.output_json])
     result = run_script("render_iteration_directions.py", cmd)
+    print(json.dumps(result["payload"] if result["payload"] is not None else result, ensure_ascii=False, indent=2))
+    return 0 if result["ok"] else 2
+
+
+def command_feedback(args: argparse.Namespace) -> int:
+    skill_dir = str(Path(args.skill_dir).resolve())
+    cmd = [skill_dir]
+    if args.note:
+        cmd.extend(["--note", args.note])
+    cmd.extend(["--rating", str(args.rating), "--category", args.category, "--recommended-action", args.recommended_action])
+    result = run_script("collect_feedback.py", cmd)
+    viewer = run_script("render_review_viewer.py", [skill_dir])
+    report = {
+        "ok": result["ok"] and viewer["ok"],
+        "feedback": result["payload"] if result["payload"] is not None else result,
+        "review_viewer": viewer["payload"] if viewer["payload"] is not None else viewer,
+    }
+    print(json.dumps(report, ensure_ascii=False, indent=2))
+    return 0 if report["ok"] else 2
+
+
+def command_baseline_compare(args: argparse.Namespace) -> int:
+    result = run_script("render_baseline_compare.py", baseline_compare_args())
     print(json.dumps(result["payload"] if result["payload"] is not None else result, ensure_ascii=False, indent=2))
     return 0 if result["ok"] else 2
 
@@ -323,6 +429,7 @@ def command_workspace_flow(args: argparse.Namespace) -> int:
             {"phase": "report-refresh", "result": run_script("render_eval_dashboard.py", [])},
             {"phase": "report-refresh", "result": run_script("render_description_drift_history.py", [])},
             {"phase": "report-refresh", "result": run_script("render_iteration_ledger.py", [])},
+            {"phase": "report-refresh", "result": run_script("render_baseline_compare.py", baseline_compare_args())},
             {"phase": "report-refresh", "result": run_script("render_regression_history.py", [])},
             {"phase": "report-refresh", "result": run_script("render_context_reports.py", [])},
             {"phase": "report-refresh", "result": run_script("render_portability_report.py", [])},
@@ -418,7 +525,21 @@ def build_parser() -> argparse.ArgumentParser:
     init_cmd.add_argument("--description", default="Describe what the skill does and when to use it.")
     init_cmd.add_argument("--title")
     init_cmd.add_argument("--output-dir", default=".")
+    init_cmd.add_argument("--mode", choices=["scaffold", "production", "library"], default="scaffold")
     init_cmd.set_defaults(func=command_init)
+
+    quickstart_cmd = subparsers.add_parser(
+        "quickstart",
+        help="Interactive fast path for creating a scaffold-first skill package.",
+    )
+    quickstart_cmd.add_argument("--name")
+    quickstart_cmd.add_argument("--job")
+    quickstart_cmd.add_argument("--primary-output")
+    quickstart_cmd.add_argument("--description")
+    quickstart_cmd.add_argument("--title")
+    quickstart_cmd.add_argument("--output-dir", default=".")
+    quickstart_cmd.add_argument("--mode", choices=["scaffold", "production", "library"])
+    quickstart_cmd.set_defaults(func=command_quickstart)
 
     validate_cmd = subparsers.add_parser("validate", help="Run validate, lint, governance, and resource checks.")
     validate_cmd.add_argument("skill_dir", nargs="?", default=".")
@@ -476,6 +597,12 @@ def build_parser() -> argparse.ArgumentParser:
     skill_report_cmd.add_argument("--output-json")
     skill_report_cmd.set_defaults(func=command_skill_report)
 
+    review_viewer_cmd = subparsers.add_parser("review-viewer", help="Render a compact HTML review page for a skill package.")
+    review_viewer_cmd.add_argument("skill_dir", nargs="?", default=".")
+    review_viewer_cmd.add_argument("--output-html")
+    review_viewer_cmd.add_argument("--output-json")
+    review_viewer_cmd.set_defaults(func=command_review_viewer)
+
     reference_scan_cmd = subparsers.add_parser(
         "reference-scan",
         help="Render a controlled benchmark scan report for a skill package.",
@@ -505,6 +632,23 @@ def build_parser() -> argparse.ArgumentParser:
     iteration_directions_cmd.add_argument("--output-md")
     iteration_directions_cmd.add_argument("--output-json")
     iteration_directions_cmd.set_defaults(func=command_iteration_directions)
+
+    feedback_cmd = subparsers.add_parser(
+        "feedback",
+        help="Capture lightweight reviewer feedback without running the full promotion flow.",
+    )
+    feedback_cmd.add_argument("skill_dir", nargs="?", default=".")
+    feedback_cmd.add_argument("--note")
+    feedback_cmd.add_argument("--rating", type=int, default=3)
+    feedback_cmd.add_argument("--category", default="general")
+    feedback_cmd.add_argument("--recommended-action", default="review")
+    feedback_cmd.set_defaults(func=command_feedback)
+
+    baseline_compare_cmd = subparsers.add_parser(
+        "baseline-compare",
+        help="Render a lightweight with-skill vs baseline comparison across tracked targets.",
+    )
+    baseline_compare_cmd.set_defaults(func=command_baseline_compare)
 
     package_cmd = subparsers.add_parser("package", help="Export compatibility artifacts for selected targets.")
     package_cmd.add_argument("skill_dir", nargs="?", default=".")

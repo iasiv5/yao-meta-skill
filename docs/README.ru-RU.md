@@ -13,6 +13,9 @@
 - контролируемым benchmark/reference scan до глубокого authoring
 - автоматически создаваемым минималистичным HTML-обзором на белом фоне для каждого нового skill
 - тремя наиболее ценными направлениями следующей итерации после первого создания
+- компактным HTML review viewer для быстрой первой ручной оценки
+- легким feedback log, чтобы не запускать полный promotion flow на каждом цикле
+- отчетом with-skill vs baseline для быстрого сравнения инкрементальной пользы
 - нейтральными исходными метаданными и клиентскими адаптерами
 - встроенными проверками governance, promotion и portability в стандартном потоке
 
@@ -68,7 +71,7 @@ flowchart LR
 2. Сначала проведите короткий intent dialogue, чтобы уточнить реальную job-to-be-done, outputs, exclusions и constraints.
 3. Затем выполните короткий reference scan, где основными источниками будут GitHub и сильные публичные эталоны, а локальные файлы будут использоваться только для адаптации, приватности и совместимости.
 4. Используйте `yao-meta-skill`, чтобы сгенерировать или улучшить пакет в режиме scaffold, production или library.
-5. Каждый новый skill также получает `reports/intent-dialogue.md`, `reports/skill-overview.html`, `reports/reference-scan.md` и `reports/iteration-directions.md`.
+5. Каждый новый skill также получает `reports/intent-dialogue.md`, `reports/skill-overview.html`, `reports/review-viewer.html`, `reports/reference-scan.md` и `reports/iteration-directions.md`. После этого feedback log и baseline compare позволяют запускать короткий цикл улучшений без полного promotion flow.
 
 ## Текущие результаты
 

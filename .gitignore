@@ -9,4 +9,6 @@ tests/tmp_skill_overview/
 tests/tmp_skill_preview/
 tests/tmp_reference_scan/
 tests/tmp_iteration_directions/
+tests/tmp_review_viewer/
+tests/tmp_feedback/
 reports/release_snapshots/

@@ -13,6 +13,9 @@
 - 深度起草前先做一轮受控的 benchmark/reference scan
 - 新建 skill 时自动生成一份极简白底 HTML 可视化说明
 - 首次建包后会自动给出 3 个最有价值的下一步迭代方向
+- 提供一个紧凑的 HTML review viewer，方便第一次人工理解和评审
+- 提供一个轻量 feedback log，不必每次都走完整 promotion 流程
+- 提供一个 with-skill vs baseline 的对比报告，便于快速看增量收益
 - 中性的源元数据以及面向不同客户端的适配层
 - 内建的治理、晋升和 portability 检查
 
@@ -68,7 +71,7 @@ flowchart LR
 2. 先做一轮简短的意图对话，把真实任务、输出物、边界和约束说清楚。
 3. 再做一轮参考扫描，以 GitHub 和世界级公开对象为主来源，本地文件只做适配和隐私校准。
 4. 使用 `yao-meta-skill` 以 scaffold、production 或 library 模式生成或改进 skill 包。
-5. 新建 skill 后，会默认附带 `reports/intent-dialogue.md`、`reports/skill-overview.html`、`reports/reference-scan.md` 和 `reports/iteration-directions.md`，方便理解架构、逻辑、使用方法、可借鉴对象以及下一步最值的 3 个迭代方向。
+5. 新建 skill 后，会默认附带 `reports/intent-dialogue.md`、`reports/skill-overview.html`、`reports/review-viewer.html`、`reports/reference-scan.md` 和 `reports/iteration-directions.md`；后续还可以通过 feedback log 和 baseline compare 快速收集意见、查看增量收益，而不必每次都走完整 promotion 流程。
 
 ## 当前结果
 
