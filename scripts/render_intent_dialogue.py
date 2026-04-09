@@ -52,24 +52,28 @@ def classify_focus(description: str) -> str:
 def build_questions(focus: str) -> list[dict]:
     base = [
         {
-            "question": "What recurring job should this skill own every time?",
-            "why": "This defines the core capability sentence and keeps the package from drifting.",
+            "question": "If this skill worked beautifully, what recurring job would it quietly take off the user's plate every time?",
+            "why": "This reveals the real job-to-be-done and gives the package a humane center instead of a guessed prompt shape.",
         },
         {
-            "question": "What inputs will users actually hand to this skill?",
+            "question": "When someone reaches for this skill in the real world, what materials will they actually hand to it?",
             "why": "Input shape decides whether references, scripts, or templates are needed.",
         },
         {
-            "question": "What concrete outputs must the skill produce?",
+            "question": "What finished output should it hand back so the user can immediately keep moving?",
             "why": "Outputs should drive the package structure before extra guidance is added.",
         },
         {
-            "question": "Which near-neighbor requests should not trigger this skill?",
+            "question": "Which nearby requests should this skill politely refuse so the boundary stays clean?",
             "why": "The exclusion list is the fastest route to better trigger quality.",
         },
         {
-            "question": "What constraints matter: privacy, naming, local fit, portability, or governance?",
+            "question": "What matters most here: speed, consistency, auditability, portability, governance, or tone/style fit?",
             "why": "Constraints decide how much structure, packaging, and review the skill actually needs.",
+        },
+        {
+            "question": "Do you already have any references you want this skill to learn from, such as a repo, product, page, workflow, or prompt example?",
+            "why": "A good reference can raise the quality bar quickly, but the skill should only borrow patterns and standards, never copy wording or confidential material.",
         },
     ]
     if focus == "quality-and-boundary":
@@ -112,6 +116,7 @@ def build_summary(skill_dir: Path) -> dict:
             "required outputs",
             "exclusions",
             "constraints",
+            "reference preferences",
             "first evaluation target",
         ],
         "recommended_first_gate": "trigger and boundary" if focus != "portability-and-contract" else "portability and contract",
@@ -121,6 +126,8 @@ def build_summary(skill_dir: Path) -> dict:
         "title": title,
         "description": description,
         "focus": focus,
+        "opening_frame": "Let's shape the skill around the real work, the desired outcome, and the standards you care about before we start adding structure.",
+        "reference_note": "If you already have examples you admire, bring them in. We will learn the pattern, not copy the source.",
         "questions": questions,
         "output": output,
     }
@@ -132,6 +139,10 @@ def render_markdown(summary: dict) -> str:
         "",
         f"Skill: `{summary['skill_name']}`",
         "",
+        "## Opening Frame",
+        "",
+        summary["opening_frame"],
+        "",
         "## Why Start Here",
         "",
         "Use this short dialogue before deep authoring. The goal is to learn the real job, output, exclusions, and constraints so the first package is small but accurate.",
@@ -141,6 +152,7 @@ def render_markdown(summary: dict) -> str:
         f"- Title: `{summary['title']}`",
         f"- Description: {summary['description']}",
         f"- Focus: `{summary['focus']}`",
+        f"- Reference note: {summary['reference_note']}",
         "",
         "## Questions To Ask",
         "",

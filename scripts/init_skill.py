@@ -6,7 +6,7 @@ from pathlib import Path
 
 from render_intent_dialogue import render_intent_dialogue
 from render_iteration_directions import render_iteration_directions
-from render_reference_scan import render_reference_scan
+from render_reference_scan import parse_reference, render_reference_scan
 from render_review_viewer import render_review_viewer
 from render_skill_overview import render_skill_overview
 
@@ -37,18 +37,20 @@ README_TEMPLATE = """# {title}
 ## How To Use
 
 1. Load the skill through `SKILL.md`.
-2. Start with `reports/intent-dialogue.md` to tighten the real job, outputs, and exclusions.
-3. Follow the workflow steps in `SKILL.md`.
-4. Check `reports/skill-overview.html` if you want a fast visual explanation of the package.
-5. Open `reports/review-viewer.html` for a compact visual review of the package.
-6. Review `reports/iteration-directions.md` for the three most valuable next moves.
+2. Start with `reports/intent-dialogue.md` to tighten the real job, outputs, exclusions, and the standards you care about.
+3. Open `reports/reference-scan.md` to capture external benchmarks and any user-supplied references worth learning from.
+4. Follow the workflow steps in `SKILL.md`.
+5. Check `reports/skill-overview.html` if you want a fast visual explanation of the package.
+6. Open `reports/review-viewer.html` for a compact visual review of the package.
+7. Review `reports/iteration-directions.md` for the three most valuable next moves.
 
 ## Package Map
 
 - `SKILL.md`: trigger and workflow entrypoint
 - `agents/interface.yaml`: portable interface metadata
 - `manifest.json`: lifecycle and packaging metadata
-- `reports/intent-dialogue.md`: front-loaded discovery questions for better boundary design
+- `reports/intent-dialogue.md`: front-loaded discovery questions for better boundary design and clearer human alignment
+- `reports/reference-scan.md`: benchmark notes from public references, user references, and local constraints
 - `reports/skill-overview.html`: visual overview report
 - `reports/review-viewer.html`: compact review page for architecture, usage, feedback, and next steps
 - `reports/iteration-directions.md`: the top three next iteration directions
@@ -144,6 +146,9 @@ def initialize_skill(
     output_dir: str = ".",
     mode: str = "scaffold",
     archetype: str = "scaffold",
+    external_references: list[dict] | None = None,
+    user_references: list[dict] | None = None,
+    local_constraints: list[dict] | None = None,
 ) -> dict:
     title = title or name.replace("-", " ").title()
     root = Path(output_dir).resolve() / name
@@ -174,7 +179,7 @@ def initialize_skill(
     )
     overview = render_skill_overview(root)
     intent_dialogue = render_intent_dialogue(root)
-    reference_scan = render_reference_scan(root, [])
+    reference_scan = render_reference_scan(root, [*(external_references or []), *(user_references or []), *(local_constraints or [])])
     iteration_directions = render_iteration_directions(root)
     review_viewer = render_review_viewer(root)
     return {
@@ -207,8 +212,21 @@ def main() -> None:
     parser.add_argument("--output-dir", default=".")
     parser.add_argument("--mode", choices=sorted(MODE_CONFIG.keys()), default="scaffold")
     parser.add_argument("--archetype", choices=sorted(MODE_CONFIG.keys()), default="scaffold")
+    parser.add_argument("--external-reference", action="append", default=[])
+    parser.add_argument("--user-reference", action="append", default=[])
+    parser.add_argument("--local-constraint", action="append", default=[])
     args = parser.parse_args()
-    result = initialize_skill(args.name, args.description, args.title, args.output_dir, args.mode, args.archetype)
+    result = initialize_skill(
+        args.name,
+        args.description,
+        args.title,
+        args.output_dir,
+        args.mode,
+        args.archetype,
+        external_references=[parse_reference(item, "external") for item in args.external_reference],
+        user_references=[parse_reference(item, "user") for item in args.user_reference],
+        local_constraints=[parse_reference(item, "local") for item in args.local_constraint],
+    )
     print(json.dumps(result, ensure_ascii=False, indent=2))
 
 

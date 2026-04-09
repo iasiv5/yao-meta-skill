@@ -121,6 +121,15 @@ def prompt_with_default(label: str, default: str) -> str:
     return value or default
 
 
+def prompt_optional_entries(label: str) -> list[str]:
+    sys.stderr.write(f"{label} [none]: ")
+    sys.stderr.flush()
+    value = sys.stdin.readline().strip()
+    if not value or value.lower() in {"none", "no", "n"}:
+        return []
+    return [item.strip() for item in value.split(",") if item.strip()]
+
+
 ARCHETYPE_MODE = {
     "scaffold": "scaffold",
     "production": "production",
@@ -163,29 +172,35 @@ def archetype_guidance(archetype: str) -> dict:
 
 
 def command_init(args: argparse.Namespace) -> int:
-    result = run_script(
-        "init_skill.py",
-        [
-            args.name,
-            "--description",
-            args.description,
-            "--output-dir",
-            args.output_dir,
-            "--mode",
-            args.mode,
-            "--archetype",
-            args.archetype,
-            *(["--title", args.title] if args.title else []),
-        ],
-    )
+    cmd = [
+        args.name,
+        "--description",
+        args.description,
+        "--output-dir",
+        args.output_dir,
+        "--mode",
+        args.mode,
+        "--archetype",
+        args.archetype,
+        *(["--title", args.title] if args.title else []),
+    ]
+    for reference in args.external_reference:
+        cmd.extend(["--external-reference", reference])
+    for reference in args.user_reference:
+        cmd.extend(["--user-reference", reference])
+    for constraint in args.local_constraint:
+        cmd.extend(["--local-constraint", constraint])
+    result = run_script("init_skill.py", cmd)
     print(json.dumps(result["payload"] if result["payload"] is not None else result, ensure_ascii=False, indent=2))
     return 0 if result["ok"] else 2
 
 
 def command_quickstart(args: argparse.Namespace) -> int:
+    sys.stderr.write("Let's shape this skill around the real work, the outcome, and the standards you care about before we add structure.\n")
+    sys.stderr.write("If you already have references you admire, bring them in. We'll learn the pattern, not copy the source.\n")
     name = args.name or prompt_with_default("Skill name", "my-skill")
-    job = args.job or prompt_with_default("Recurring job", "Turn a repeated workflow into a reusable skill.")
-    primary_output = args.primary_output or prompt_with_default("Primary output", "A reusable skill package.")
+    job = args.job or prompt_with_default("What repeated work should this skill quietly take off your hands", "Turn a repeated workflow into a reusable skill.")
+    primary_output = args.primary_output or prompt_with_default("What should it reliably hand back", "A reusable skill package.")
     description = args.description or f"{job.rstrip('.')} Primary output: {primary_output.rstrip('.')}."
     inferred_archetype, archetype_reason = infer_archetype(job, description)
     archetype = args.archetype or prompt_with_default("Archetype (scaffold/production/library/governed)", inferred_archetype)
@@ -193,30 +208,48 @@ def command_quickstart(args: argparse.Namespace) -> int:
     default_mode = ARCHETYPE_MODE[archetype]
     mode = args.mode or prompt_with_default("Mode (scaffold/production/library/governed)", default_mode)
     mode = mode if mode in ARCHETYPE_MODE.values() else default_mode
+    user_references = args.user_reference or prompt_optional_entries(
+        "Reference examples you want it to learn from (repo, product, page, workflow; comma-separated)"
+    )
+    external_references = args.external_reference or prompt_optional_entries(
+        "Public benchmark objects to scan first (high-star GitHub repo, official doc, product; comma-separated)"
+    )
+    local_constraints = args.local_constraint or prompt_optional_entries(
+        "Local constraints that must still be respected (privacy, naming, compatibility; comma-separated)"
+    )
     title = args.title or name.replace("-", " ").title()
     guidance = archetype_guidance(archetype)
-    result = run_script(
-        "init_skill.py",
-        [
-            name,
-            "--description",
-            description,
-            "--title",
-            title,
-            "--output-dir",
-            args.output_dir,
-            "--mode",
-            mode,
-            "--archetype",
-            archetype,
-        ],
-    )
+    cmd = [
+        name,
+        "--description",
+        description,
+        "--title",
+        title,
+        "--output-dir",
+        args.output_dir,
+        "--mode",
+        mode,
+        "--archetype",
+        archetype,
+    ]
+    for reference in external_references:
+        cmd.extend(["--external-reference", reference])
+    for reference in user_references:
+        cmd.extend(["--user-reference", reference])
+    for constraint in local_constraints:
+        cmd.extend(["--local-constraint", constraint])
+    result = run_script("init_skill.py", cmd)
     payload = result["payload"] if result["payload"] is not None else result
     report = {
         "ok": result["ok"],
         "root": payload.get("root"),
         "mode": mode,
         "archetype": archetype,
+        "references": {
+            "external_benchmarks": external_references,
+            "user_references": user_references,
+            "local_constraints": local_constraints,
+        },
         "artifacts": payload.get("artifacts", {}),
         "guidance": {
             "archetype_reason": archetype_reason,
@@ -229,6 +262,7 @@ def command_quickstart(args: argparse.Namespace) -> int:
             "focus": guidance["focus"],
             "next_steps": [
                 "Open reports/intent-dialogue.md and tighten the real job, outputs, and exclusions.",
+                "Open reports/reference-scan.md and decide which external patterns to borrow and which user references set the quality bar.",
                 "Open reports/review-viewer.html to explain the package to a first-time reviewer.",
                 "Use reports/iteration-directions.md to choose only one high-value next move before adding more files.",
             ],
@@ -367,6 +401,8 @@ def command_reference_scan(args: argparse.Namespace) -> int:
     cmd = [skill_dir]
     for reference in args.external_reference:
         cmd.extend(["--external-reference", reference])
+    for reference in args.user_reference:
+        cmd.extend(["--user-reference", reference])
     for constraint in args.local_constraint:
         cmd.extend(["--local-constraint", constraint])
     for reference in args.reference:
@@ -581,6 +617,9 @@ def build_parser() -> argparse.ArgumentParser:
     init_cmd.add_argument("--output-dir", default=".")
     init_cmd.add_argument("--mode", choices=["scaffold", "production", "library", "governed"], default="scaffold")
     init_cmd.add_argument("--archetype", choices=["scaffold", "production", "library", "governed"], default="scaffold")
+    init_cmd.add_argument("--external-reference", action="append", default=[])
+    init_cmd.add_argument("--user-reference", action="append", default=[])
+    init_cmd.add_argument("--local-constraint", action="append", default=[])
     init_cmd.set_defaults(func=command_init)
 
     quickstart_cmd = subparsers.add_parser(
@@ -595,6 +634,9 @@ def build_parser() -> argparse.ArgumentParser:
     quickstart_cmd.add_argument("--output-dir", default=".")
     quickstart_cmd.add_argument("--mode", choices=["scaffold", "production", "library", "governed"])
     quickstart_cmd.add_argument("--archetype", choices=["scaffold", "production", "library", "governed"])
+    quickstart_cmd.add_argument("--external-reference", action="append", default=[])
+    quickstart_cmd.add_argument("--user-reference", action="append", default=[])
+    quickstart_cmd.add_argument("--local-constraint", action="append", default=[])
     quickstart_cmd.set_defaults(func=command_quickstart)
 
     validate_cmd = subparsers.add_parser("validate", help="Run validate, lint, governance, and resource checks.")
@@ -666,6 +708,7 @@ def build_parser() -> argparse.ArgumentParser:
     reference_scan_cmd.add_argument("skill_dir", nargs="?", default=".")
     reference_scan_cmd.add_argument("--reference", action="append", default=[])
     reference_scan_cmd.add_argument("--external-reference", action="append", default=[])
+    reference_scan_cmd.add_argument("--user-reference", action="append", default=[])
     reference_scan_cmd.add_argument("--local-constraint", action="append", default=[])
     reference_scan_cmd.add_argument("--output-md")
     reference_scan_cmd.add_argument("--output-json")

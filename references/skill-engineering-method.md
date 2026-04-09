@@ -41,6 +41,7 @@ Before deep authoring, ask only the questions that change the package design.
 - what real inputs will users hand to it
 - what outputs must it produce
 - what near-neighbor requests should stay out of scope
+- whether the user has reference systems, repos, or products worth learning from
 - what constraints matter: privacy, naming, portability, governance, or local fit
 
 See [Intent Dialogue](intent-dialogue.md).
@@ -72,8 +73,9 @@ Boundary work comes before polishing prose.
 Run a short benchmark pass before deep authoring.
 
 - scan `3-5` reference objects at most
-- prioritize external GitHub and official benchmark sources first
-- use local files second, only for fit, privacy, and compatibility calibration
+- prioritize high-star external GitHub and official benchmark sources first
+- ask for user-supplied references second, but extract only patterns and standards
+- use local files third, only for fit, privacy, and compatibility calibration
 - choose from method, structure, execution, portability, and domain patterns
 - extract only what improves reliability or clarity
 - record what not to borrow so the new skill stays light

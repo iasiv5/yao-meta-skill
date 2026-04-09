@@ -28,8 +28,8 @@ Mode rules: [Operating Modes](references/operating-modes.md), [QA Ladder](refere
 ## Compact Workflow
 
 1. Decide whether the request should become a skill, then choose the lightest archetype.
-2. Run a short intent dialogue to capture the recurring job, outputs, trigger phrases, exclusions, and constraints.
-3. Run a short reference scan with external benchmark objects first; use local files only for fit, privacy, and compatibility calibration.
+2. Begin with a short, human intent dialogue to capture the recurring job, outputs, trigger phrases, exclusions, constraints, and the user's taste or standards.
+3. Run a short reference scan with high-quality external benchmark objects first, then ask whether the user has references worth learning from; use local files only for fit, privacy, and compatibility calibration.
 4. Write the `description` early, then test route quality before expanding the package.
 5. Add only the folders and gates that earn their keep: `trigger_eval.py`, `optimize_description.py`, `judge_blind_eval.py`, `resource_boundary_check.py`, `governance_check.py`, `cross_packager.py`.
 6. After the first package exists, surface the top three next iteration directions instead of expanding the skill in every direction at once.

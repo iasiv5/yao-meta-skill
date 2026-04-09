@@ -47,12 +47,13 @@ def main() -> None:
         "quickstart",
         "--output-dir",
         str(tmp_root),
-        input_text="quickstart-skill\nTurn rough notes into a reusable package.\nA reusable markdown workflow.\nproduction\nproduction\n",
+        input_text="quickstart-skill\nTurn rough notes into a reusable package.\nA reusable markdown workflow.\nproduction\nproduction\nA top-tier internal workflow product\nhigh-star GitHub repo, official docs\nprivacy and naming\n",
     )
     assert quickstart_result["ok"], quickstart_result
     quickstart_root = Path(quickstart_result["payload"]["root"])
     assert (quickstart_root / "reports" / "review-viewer.html").exists(), quickstart_root
     assert quickstart_result["payload"]["archetype"] == "production", quickstart_result
+    assert quickstart_result["payload"]["references"]["user_references"] == ["A top-tier internal workflow product"], quickstart_result
 
     validate_result = run("validate", str(created))
     assert validate_result["ok"], validate_result
@@ -71,11 +72,14 @@ def main() -> None:
         str(created),
         "--external-reference",
         "World Class Method::method::Borrow the smallest repeatable evaluation loop.::Do not copy heavy ceremony.",
+        "--user-reference",
+        "Product I Admire::taste::Learn the calm structure and clarity of output.::Do not copy wording.",
         "--local-constraint",
         "Local Naming::structure::Keep folder naming aligned with the local library.::Do not inherit private references.",
     )
     assert reference_scan_result["ok"], reference_scan_result
     assert reference_scan_result["payload"]["artifacts"]["markdown"].endswith("reports/reference-scan.md"), reference_scan_result
+    assert len(reference_scan_result["payload"]["summary"]["user_references"]) == 1, reference_scan_result
 
     intent_result = run("intent-dialogue", str(created))
     assert intent_result["ok"], intent_result
