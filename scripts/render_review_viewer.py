@@ -43,6 +43,11 @@ def load_specific_promotion(skill_dir: Path) -> dict:
     return payload if isinstance(payload, dict) else {}
 
 
+def load_benchmark_summary(skill_dir: Path) -> dict:
+    payload = load_json(skill_dir / "reports" / "github-benchmark-scan.json")
+    return payload if isinstance(payload, dict) else {}
+
+
 def ensure_report_inputs(skill_dir: Path) -> dict:
     overview_json = skill_dir / "reports" / "skill-overview.json"
     intent_json = skill_dir / "reports" / "intent-dialogue.json"
@@ -62,6 +67,7 @@ def ensure_report_inputs(skill_dir: Path) -> dict:
     baseline = load_baseline_summary(skill_dir)
     compare = load_specific_compare(skill_dir)
     promotion = load_specific_promotion(skill_dir)
+    benchmark = load_benchmark_summary(skill_dir)
     return {
         "overview": overview,
         "intent": intent,
@@ -71,6 +77,7 @@ def ensure_report_inputs(skill_dir: Path) -> dict:
         "baseline": baseline,
         "compare": compare,
         "promotion": promotion,
+        "benchmark": benchmark,
     }
 
 
@@ -112,6 +119,19 @@ def compare_rows(compare: dict) -> list[dict]:
     return rows
 
 
+def benchmark_cards(benchmark: dict) -> list[dict]:
+    cards = []
+    for repo in benchmark.get("repositories", [])[:3]:
+        cards.append(
+            {
+                "name": repo.get("full_name", "Unknown repo"),
+                "borrow": repo.get("borrow", [])[:2],
+                "avoid": repo.get("avoid", [])[:1],
+            }
+        )
+    return cards
+
+
 def render_html(report: dict) -> str:
     overview = report["overview"]
     intent = report["intent"]
@@ -122,8 +142,10 @@ def render_html(report: dict) -> str:
     baseline = report.get("baseline", {})
     compare = report.get("compare", {})
     promotion = report.get("promotion", {})
+    benchmark = report.get("benchmark", {})
     architecture = architecture_steps(overview)
     compare_table_rows = compare_rows(compare)
+    benchmark_rows = benchmark_cards(benchmark)
 
     strength_items = "".join(f"<li>{html.escape(item)}</li>" for item in overview.get("strengths", []))
     logic_items = "".join(f"<li>{html.escape(item)}</li>" for item in overview.get("logic_steps", []))
@@ -224,6 +246,23 @@ def render_html(report: dict) -> str:
         )
     else:
         promotion_html = "<p class='minor'>No promotion summary is attached to this package yet.</p>"
+
+    benchmark_html = ""
+    if benchmark_rows:
+        benchmark_html = "".join(
+            (
+                "<div class='direction-card'>"
+                f"<h3>{html.escape(item['name'])}</h3>"
+                "<p><strong>Borrow now</strong></p>"
+                + ("<ul>" + "".join(f"<li>{html.escape(borrow)}</li>" for borrow in item.get('borrow', [])) + "</ul>" if item.get("borrow") else "<p>No borrow cues recorded.</p>")
+                + "<p><strong>Avoid</strong></p>"
+                + ("<ul>" + "".join(f"<li>{html.escape(avoid)}</li>" for avoid in item.get('avoid', [])) + "</ul>" if item.get("avoid") else "<p>No avoid cues recorded.</p>")
+                + "</div>"
+            )
+            for item in benchmark_rows
+        )
+    else:
+        benchmark_html = "<p class='minor'>No GitHub benchmark scan has been attached to this package yet.</p>"
 
     return f"""<!DOCTYPE html>
 <html lang="en">
@@ -411,6 +450,21 @@ def render_html(report: dict) -> str:
       <div class="panel">
         <h2>Compare view</h2>
         {baseline_html}
+      </div>
+    </section>
+
+    <section class="grid">
+      <div class="panel">
+        <h2>Reference coach</h2>
+        <div class="direction-grid">{benchmark_html}</div>
+      </div>
+      <div class="panel">
+        <h2>Decide before you deepen</h2>
+        <ul>
+          <li>Choose one pattern to borrow on purpose, not three at once.</li>
+          <li>State one thing this skill will not inherit from the benchmark objects.</li>
+          <li>Only deepen the package after that choice is visible in the boundary or execution flow.</li>
+        </ul>
       </div>
     </section>
 

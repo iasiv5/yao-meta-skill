@@ -203,11 +203,12 @@ def command_init(args: argparse.Namespace) -> int:
 
 
 def command_quickstart(args: argparse.Namespace) -> int:
-    sys.stderr.write("Let's shape this skill around the real work, the outcome, and the standards you care about before we add structure.\n")
-    sys.stderr.write("I will also scan a few strong public GitHub references first, so we can borrow the right patterns without copying the source.\n")
+    sys.stderr.write("Let's start gently and shape this skill around the real work, the outcome, and the standards you actually care about.\n")
+    sys.stderr.write("You do not need a perfect brief. A rough description is enough, and I will help tighten it.\n")
+    sys.stderr.write("I will also look at a few strong public GitHub references first, so we can borrow proven patterns without copying the source.\n")
     name = args.name or prompt_with_default("Skill name", "my-skill")
-    job = args.job or prompt_with_default("What repeated work should this skill quietly take off your hands", "Turn a repeated workflow into a reusable skill.")
-    primary_output = args.primary_output or prompt_with_default("What should it reliably hand back", "A reusable skill package.")
+    job = args.job or prompt_with_default("What repeated work do you most want this skill to quietly take off your hands", "Turn a repeated workflow into a reusable skill.")
+    primary_output = args.primary_output or prompt_with_default("If it works well, what should it hand back so you can keep moving", "A reusable skill package.")
     description = args.description or f"{job.rstrip('.')} Primary output: {primary_output.rstrip('.')}."
     inferred_archetype, archetype_reason = infer_archetype(job, description)
     archetype = args.archetype or prompt_with_default("Archetype (scaffold/production/library/governed)", inferred_archetype)
@@ -226,6 +227,7 @@ def command_quickstart(args: argparse.Namespace) -> int:
     )
     github_query = args.github_query or build_query(" ".join(filter(None, [job, primary_output, description])))
     sys.stderr.write(f"GitHub benchmark query: {github_query}\n")
+    sys.stderr.write("I will use that query to pull three strong public examples, then surface only the patterns worth borrowing or avoiding.\n")
     title = args.title or name.replace("-", " ").title()
     guidance = archetype_guidance(archetype)
     cmd = [
@@ -295,6 +297,7 @@ def command_quickstart(args: argparse.Namespace) -> int:
                 "Use reports/iteration-directions.md to choose only one high-value next move before adding more files.",
             ],
             "borrow_prompt": benchmark_scan.get("borrow_prompt"),
+            "experience_note": "The first pass should feel more like guided co-creation than filling out a worksheet. Use the reports to explain, choose, and only then deepen the package.",
         },
     }
     print(json.dumps(report, ensure_ascii=False, indent=2))
